@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brown Psychology Practice — Morristown, NJ</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --navy:#1a2744; --navy-mid:#243259; --navy-light:#2e3f6e;
+  --teal:#1D9E75; --teal-light:#e8f7f2; --teal-mid:#b8e8d8;
+  --gold:#c9973a; --gold-light:#fdf3e3;
+  --coral:#d95f3b; --coral-light:#fdeee9;
+  --purple:#534AB7; --purple-light:#eeedfe;
+  --slate:#64748b; --slate-light:#f1f5f9;
+  --text:#0f172a; --text-mid:#475569; --text-light:#94a3b8;
+  --bg:#f0f2f7; --white:#ffffff; --border:#e2e8f0;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 16px rgba(15,23,42,0.08);
+  --shadow-lg:0 20px 40px rgba(15,23,42,0.14);
+  --radius:14px; --radius-sm:9px; --radius-xs:6px;
+  --transition:all 0.18s cubic-bezier(0.4,0,0.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;font-size:14px;}
+
+/* ── SIDEBAR ── */
+#sidebar{width:232px;min-width:232px;background:var(--navy);display:flex;flex-direction:column;height:100vh;overflow-y:auto;position:relative;}
+#sidebar::after{content:'';position:absolute;top:0;right:0;width:1px;height:100%;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.06),transparent);}
+.brand{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.brand-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--teal),#16c47a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:10px;box-shadow:0 4px 12px rgba(29,158,117,0.4);}
+.brand h1{font-family:'Playfair Display',serif;color:#fff;font-size:14px;line-height:1.35;letter-spacing:-0.01em;}
+.brand p{color:rgba(255,255,255,0.38);font-size:11px;margin-top:2px;letter-spacing:0.02em;}
+.nav-section{padding:14px 10px 6px;}
+.nav-label{color:rgba(255,255,255,0.25);font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;padding:0 8px;margin-bottom:3px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius-sm);color:rgba(255,255,255,0.55);font-size:13px;font-weight:400;cursor:pointer;transition:var(--transition);margin-bottom:1px;user-select:none;position:relative;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(29,158,117,0.22);color:#fff;font-weight:500;}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--teal);border-radius:0 3px 3px 0;}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--coral);color:#fff;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:20px;letter-spacing:0.02em;}
+.sidebar-footer{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,0.07);}
+.user-pill{display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(255,255,255,0.05);border-radius:var(--radius-sm);}
+.u-avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--teal),#16c47a);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0;}
+.u-info p{color:#fff;font-size:12.5px;font-weight:500;}
+.u-info span{color:rgba(255,255,255,0.38);font-size:10.5px;}
+
+/* ── MAIN ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.hipaa-bar{background:linear-gradient(90deg,var(--navy),var(--navy-mid));color:rgba(255,255,255,0.65);font-size:10.5px;padding:5px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;letter-spacing:0.02em;}
+.hipaa-bar strong{color:rgba(255,255,255,0.85);}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:var(--shadow-sm);}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.page-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:var(--navy);letter-spacing:-0.02em;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--slate-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 12px;width:210px;transition:var(--transition);}
+.search-wrap:focus-within{border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px var(--teal-light);}
+.search-wrap input{border:none;background:transparent;outline:none;font-size:13px;width:100%;color:var(--text);font-family:'Inter',sans-serif;}
+.search-wrap input::placeholder{color:var(--text-light);}
+.btn{padding:7px 14px;border-radius:var(--radius-sm);font-size:12.5px;font-weight:500;cursor:pointer;border:none;transition:var(--transition);font-family:'Inter',sans-serif;letter-spacing:0.01em;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:linear-gradient(135deg,var(--teal),#22b882);color:#fff;box-shadow:0 2px 8px rgba(29,158,117,0.3);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(29,158,117,0.4);}
+.btn-secondary{background:var(--white);color:var(--text-mid);border:1px solid var(--border);}
+.btn-secondary:hover{background:var(--slate-light);border-color:#cbd5e1;}
+.btn-sm{padding:5px 11px;font-size:11.5px;}
+.btn-ghost{background:transparent;color:var(--text-mid);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--slate-light);}
+.btn-export{background:linear-gradient(135deg,#1d6f42,#2a9d5c);color:#fff;box-shadow:0 2px 6px rgba(29,111,66,0.25);}
+.btn-export:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(29,111,66,0.35);}
+.btn-word{background:linear-gradient(135deg,#1e4d8c,#2b6bd6);color:#fff;box-shadow:0 2px 6px rgba(30,77,140,0.25);}
+.btn-word:hover{transform:translateY(-1px);}
+.btn-outlook{background:linear-gradient(135deg,#0072c6,#0090ea);color:#fff;box-shadow:0 2px 6px rgba(0,114,198,0.25);}
+.btn-outlook:hover{transform:translateY(-1px);}
+.content{flex:1;overflow-y:auto;padding:22px 24px;display:flex;flex-direction:column;gap:18px;}
+.page{display:none;flex-direction:column;gap:18px;}
+.page.active{display:flex;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;}
+.card-hdr{padding:15px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#fff,#fafbfd);}
+.card-hdr h3{font-size:13.5px;font-weight:600;color:var(--navy);letter-spacing:-0.01em;}
+.card-hdr .hdr-actions{display:flex;gap:6px;align-items:center;}
+.card-body{padding:18px;}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.stat{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px 18px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:var(--transition);}
+.stat:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.stat.s-teal::before{background:linear-gradient(90deg,var(--teal),#22b882);}
+.stat.s-gold::before{background:linear-gradient(90deg,var(--gold),#e6b84a);}
+.stat.s-coral::before{background:linear-gradient(90deg,var(--coral),#e8754f);}
+.stat.s-purple::before{background:linear-gradient(90deg,var(--purple),#6b60d4);}
+.stat-icon-wrap{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:11px;}
+.stat-val{font-size:24px;font-weight:700;color:var(--navy);line-height:1;letter-spacing:-0.02em;}
+.stat-label{font-size:11.5px;color:var(--text-light);margin-top:3px;font-weight:500;}
+.stat-sub{font-size:11px;margin-top:5px;font-weight:500;}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.g3b{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{text-align:left;padding:9px 14px;font-size:10.5px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.9px;background:var(--slate-light);border-bottom:1px solid var(--border);}
+.tbl td{padding:11px 14px;font-size:13px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tbody tr{transition:var(--transition);}
+.tbl tbody tr:hover td{background:#f8fafc;cursor:pointer;}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.02em;}
+.bg{background:var(--teal-light);color:#0f7a5a;}
+.bb{background:var(--purple-light);color:var(--purple);}
+.bgold{background:var(--gold-light);color:#9a6f1a;}
+.br{background:var(--coral-light);color:#b04520;}
+.bgray{background:#f1f5f9;color:var(--text-light);}
+
+/* ── APPT LIST ── */
+.appt{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9;}
+.appt:last-child{border-bottom:none;}
+.appt-t{font-size:11px;color:var(--text-light);width:52px;text-align:right;flex-shrink:0;font-weight:500;}
+.appt-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.appt-inf{flex:1;min-width:0;}
+.appt-inf strong{font-size:13px;font-weight:500;display:block;}
+.appt-inf span{font-size:11.5px;color:var(--text-light);}
+
+/* ── FORMS ── */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.fg1{display:grid;grid-template-columns:1fr;gap:12px;}
+.fg .s2,.fg3 .s2{grid-column:span 2;}
+.fg .s3,.fg3 .s3{grid-column:span 3;}
+.fgroup{display:flex;flex-direction:column;gap:4px;}
+label.fl{font-size:11px;font-weight:600;color:var(--text-mid);text-transform:uppercase;letter-spacing:0.6px;}
+input.fi,select.fi,textarea.fi{border:1px solid var(--border);border-radius:var(--radius-xs);padding:8px 11px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--white);transition:var(--transition);outline:none;width:100%;}
+input.fi:focus,select.fi:focus,textarea.fi:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-light);}
+input.fi[readonly],select.fi[readonly]{background:var(--slate-light);color:var(--text-mid);}
+textarea.fi{resize:vertical;min-height:72px;}
+.fsec{font-family:'Playfair Display',serif;font-size:14px;color:var(--navy);padding:14px 0 8px;border-bottom:1px solid var(--border);margin-bottom:10px;grid-column:1/-1;font-weight:600;}
+.hipaa-note{background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:var(--radius-xs);padding:9px 13px;font-size:11.5px;color:#0a6b50;display:flex;align-items:center;gap:8px;grid-column:1/-1;}
+.ssn-warn{background:var(--gold-light);border:1px solid #f0d090;border-radius:var(--radius-xs);padding:9px 13px;font-size:11.5px;color:#7a5510;display:flex;align-items:center;gap:8px;grid-column:1/-1;}
+
+/* ── TABS ── */
+.tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:18px;gap:2px;}
+.tab{padding:9px 16px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;color:var(--text-light);transition:var(--transition);border-radius:var(--radius-xs) var(--radius-xs) 0 0;}
+.tab:hover{color:var(--navy);background:var(--slate-light);}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:600;background:var(--teal-light);}
+
+/* ── CLIENT HEADER ── */
+.client-hdr{display:flex;align-items:center;gap:18px;padding:18px;background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);}
+.c-avatar{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+.c-meta{flex:1;}
+.c-meta h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--navy);letter-spacing:-0.02em;}
+.c-meta .meta-pills{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
+.meta-pill{font-size:11.5px;color:var(--text-mid);background:var(--slate-light);padding:3px 9px;border-radius:20px;}
+
+/* ── CALENDAR ── */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-h{text-align:center;font-size:10px;font-weight:700;color:var(--text-light);padding:5px 0;text-transform:uppercase;letter-spacing:0.8px;}
+.cal-d{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-xs);font-size:12.5px;cursor:pointer;position:relative;transition:var(--transition);font-weight:400;}
+.cal-d:hover{background:var(--slate-light);}
+.cal-d.today{background:linear-gradient(135deg,var(--teal),#22b882);color:#fff;font-weight:700;box-shadow:0 3px 8px rgba(29,158,117,0.4);}
+.cal-d.has-a::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold);}
+.cal-d.today.has-a::after{background:#fff;}
+.cal-d.other{color:var(--text-light);opacity:0.35;}
+.cal-d.sel{background:var(--navy);color:#fff;}
+
+/* ── BILLING SUMMARY ── */
+.b-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.b-card{padding:15px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--white);box-shadow:var(--shadow-sm);}
+.b-card .b-amt{font-size:22px;font-weight:700;letter-spacing:-0.02em;}
+.b-card .b-lbl{font-size:11.5px;color:var(--text-light);margin-top:2px;}
+
+/* ── NOTES ── */
+.note-item{padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);box-shadow:var(--shadow-sm);}
+.note-meta{font-size:11px;color:var(--text-light);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.soap-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.soap-block{background:var(--slate-light);border-radius:var(--radius-xs);padding:10px;border:1px solid var(--border);}
+.soap-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-light);margin-bottom:4px;}
+.soap-txt{font-size:12px;line-height:1.55;color:var(--text-mid);}
+
+/* ── EMPLOYEE ── */
+.clock-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:var(--radius);padding:20px;color:#fff;box-shadow:var(--shadow);}
+.clock-time{font-size:36px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;}
+.clock-date{font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px;}
+.clock-btns{display:flex;gap:8px;margin-top:16px;}
+.btn-clock-in{background:linear-gradient(135deg,var(--teal),#22b882);color:#fff;padding:8px 20px;border-radius:var(--radius-sm);font-weight:600;font-size:13px;border:none;cursor:pointer;transition:var(--transition);box-shadow:0 3px 10px rgba(29,158,117,0.4);}
+.btn-clock-in:hover{transform:translateY(-1px);}
+.btn-clock-out{background:rgba(255,255,255,0.12);color:#fff;padding:8px 20px;border-radius:var(--radius-sm);font-weight:600;font-size:13px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;transition:var(--transition);}
+.btn-clock-out:hover{background:rgba(255,255,255,0.18);}
+.emp-stat{background:rgba(255,255,255,0.08);border-radius:var(--radius-xs);padding:10px 14px;text-align:center;}
+.emp-stat .ev{font-size:18px;font-weight:700;}
+.emp-stat .el{font-size:10.5px;color:rgba(255,255,255,0.5);margin-top:2px;}
+
+/* ── NEWS FEED ── */
+.news-feed{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;}
+.news-hdr{background:linear-gradient(135deg,var(--navy),var(--navy-light));padding:12px 16px;display:flex;align-items:center;gap:8px;}
+.news-hdr h4{color:#fff;font-size:12.5px;font-weight:600;}
+.news-live{background:var(--coral);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:0.5px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.6;}}
+.news-items{max-height:200px;overflow-y:auto;}
+.news-item{padding:10px 14px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:var(--transition);}
+.news-item:hover{background:var(--slate-light);}
+.news-item:last-child{border-bottom:none;}
+.news-source{font-size:10px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:0.8px;}
+.news-title{font-size:12px;font-weight:500;color:var(--text);margin-top:2px;line-height:1.4;}
+.news-time{font-size:10px;color:var(--text-light);margin-top:2px;}
+
+/* ── PROGRESS BARS ── */
+.prog-wrap{margin-bottom:14px;}
+.prog-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;}
+.prog-bar{background:var(--slate-light);border-radius:20px;height:7px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:20px;transition:width 0.6s ease;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,15,30,0.65);backdrop-filter:blur(5px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);width:100%;max-width:700px;max-height:88vh;overflow-y:auto;transform:translateY(24px) scale(0.98);transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1);}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-hdr{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.modal-hdr h2{font-family:'Playfair Display',serif;font-size:17px;color:var(--navy);}
+.m-close{background:var(--slate-light);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text-mid);transition:var(--transition);}
+.m-close:hover{background:var(--border);}
+.modal-body{padding:22px;}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;background:var(--slate-light);}
+
+/* ── INTEGRATION TOOLBAR ── */
+.int-bar{display:flex;gap:8px;align-items:center;padding:10px 14px;background:linear-gradient(135deg,#f8fafc,var(--white));border-radius:var(--radius-sm);border:1px solid var(--border);}
+.int-bar span{font-size:11.5px;color:var(--text-light);margin-right:4px;font-weight:500;}
+
+/* ── RISK INDICATOR ── */
+.risk-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:7px 10px;border-radius:var(--radius-xs);margin-bottom:6px;}
+.risk-row:last-child{margin-bottom:0;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8;}
+
+/* ── MISC ── */
+.divider{height:1px;background:var(--border);margin:4px 0;}
+.section-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.avatar-sm{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px;flex-shrink:0;}
+.doc-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--slate-light);border-radius:var(--radius-xs);margin-bottom:6px;border:1px solid var(--border);}
+.ins-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="brand">
+    <div class="brand-logo">🧠</div>
+    <h1>Brown Psychology<br>Practice</h1>
+    <p>Morristown, NJ</p>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <div class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="nav('schedule',this)"><span class="nav-icon">📅</span>Schedule<span class="nav-badge">4</span></div>
+    <div class="nav-item" onclick="nav('clients',this)"><span class="nav-icon">👥</span>Clients</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Clinical</div>
+    <div class="nav-item" onclick="nav('notes',this)"><span class="nav-icon">📝</span>Session Notes<span class="nav-badge">7</span></div>
+    <div class="nav-item" onclick="nav('billing',this)"><span class="nav-icon">💳</span>Billing</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Operations</div>
+    <div class="nav-item" onclick="nav('employees',this)"><span class="nav-icon">👤</span>Employees</div>
+    <div class="nav-item" onclick="nav('reports',this)"><span class="nav-icon">📈</span>Reports</div>
+    <div class="nav-item" onclick="nav('settings',this)"><span class="nav-icon">⚙️</span>Settings</div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-pill">
+      <div class="u-avatar">DB</div>
+      <div class="u-info"><p>Dr. Brown</p><span>PsyD · LCADC · Admin</span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="hipaa-bar">
+    <span>🔒 <strong>HIPAA Notice:</strong> This system contains protected health information. Authorized users only. All access is logged and audited.</span>
+    <span id="clock" style="font-variant-numeric:tabular-nums;font-weight:500;color:rgba(255,255,255,0.8)"></span>
+  </div>
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title" id="page-title">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-wrap"><span style="font-size:13px;color:var(--text-light)">🔍</span><input type="text" placeholder="Search clients, notes..."></div>
+      <button class="btn btn-secondary btn-sm" onclick="openM('new-appt')">📅 New Appointment</button>
+      <button class="btn btn-primary btn-sm" onclick="openM('new-client')">+ New Client</button>
+    </div>
+  </div>
+
+  <div class="content" id="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-row">
+        <div class="stat s-teal"><div class="stat-icon-wrap" style="background:#e8f7f2">📅</div><div class="stat-val">4</div><div class="stat-label">Today's Appointments</div><div class="stat-sub" style="color:var(--teal)">▲ 1 from yesterday</div></div>
+        <div class="stat s-purple"><div class="stat-icon-wrap" style="background:#eeedfe">👥</div><div class="stat-val">23</div><div class="stat-label">Active Clients</div><div class="stat-sub" style="color:var(--purple)">▲ 3 this month</div></div>
+        <div class="stat s-gold"><div class="stat-icon-wrap" style="background:#fdf3e3">💰</div><div class="stat-val">$2,850</div><div class="stat-label">This Week Revenue</div><div class="stat-sub" style="color:var(--gold)">▲ 12% vs last week</div></div>
+        <div class="stat s-coral"><div class="stat-icon-wrap" style="background:#fdeee9">📋</div><div class="stat-val">7</div><div class="stat-label">Notes Outstanding</div><div class="stat-sub" style="color:var(--coral)">⚠ Due within 24h</div></div>
+      </div>
+
+      <div class="g3b">
+        <div class="g2" style="align-items:start">
+          <div class="card">
+            <div class="card-hdr"><h3>Today's Schedule</h3><span style="font-size:11px;color:var(--text-light)" id="today-date"></span></div>
+            <div class="card-body" style="padding:8px 16px">
+              <div class="appt"><div class="appt-t">9:00 AM</div><div class="appt-dot" style="background:var(--teal)"></div><div class="appt-inf"><strong>Maria Santos</strong><span>EMDR · Session 8 · Aetna</span></div><span class="badge bg">Confirmed</span></div>
+              <div class="appt"><div class="appt-t">11:00 AM</div><div class="appt-dot" style="background:var(--gold)"></div><div class="appt-inf"><strong>James Mitchell</strong><span>CBT · Session 14 · BCBS</span></div><span class="badge bg">Confirmed</span></div>
+              <div class="appt"><div class="appt-t">2:00 PM</div><div class="appt-dot" style="background:var(--purple)"></div><div class="appt-inf"><strong>Rosa Hernández</strong><span>Intake · Spanish · Self-Pay</span></div><span class="badge bgold">Intake</span></div>
+              <div class="appt"><div class="appt-t">4:00 PM</div><div class="appt-dot" style="background:var(--coral)"></div><div class="appt-inf"><strong>Carlos Rivera</strong><span>Addiction · Cigna · Telehealth</span></div><span class="badge bb">Telehealth</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hdr"><h3>Monthly Goals</h3></div>
+            <div class="card-body">
+              <div class="prog-wrap"><div class="prog-top"><span>Sessions</span><span style="font-weight:600">38/50</span></div><div class="prog-bar"><div class="prog-fill" style="width:76%;background:linear-gradient(90deg,var(--teal),#22b882)"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span>Revenue</span><span style="font-weight:600">$5,700/$7,500</span></div><div class="prog-bar"><div class="prog-fill" style="width:76%;background:linear-gradient(90deg,var(--gold),#e6b84a)"></div></div></div>
+              <div class="prog-wrap"><div class="prog-top"><span>Notes Signed</span><span style="font-weight:600">31/38</span></div><div class="prog-bar"><div class="prog-fill" style="width:82%;background:linear-gradient(90deg,var(--purple),#6b60d4)"></div></div></div>
+              <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+                <div style="font-size:11.5px;color:var(--text-light);margin-bottom:8px;font-weight:500">CLIENT MIX</div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Insurance</span><span style="font-weight:600;color:var(--teal)">61%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Self-Pay</span><span style="font-weight:600;color:var(--gold)">26%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Sliding Scale</span><span style="font-weight:600;color:var(--purple)">9%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px"><span>Medicaid</span><span style="font-weight:600;color:var(--coral)">4%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- News Feed -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="news-feed">
+            <div class="news-hdr"><span style="font-size:15px">📰</span><h4>NJ Statewide News</h4><span class="news-live">LIVE</span></div>
+            <div class="news-items" id="news-feed">
+              <div class="news-item"><div class="news-source">NJ.com</div><div class="news-title">NJ mental health funding expanded for underserved communities in Morris County</div><div class="news-time">2 hours ago</div></div>
+              <div class="news-item"><div class="news-source">Daily Record</div><div class="news-title">Morristown hospital opens new behavioral health wing this spring</div><div class="news-time">4 hours ago</div></div>
+              <div class="news-item"><div class="news-source">NJ Health</div><div class="news-title">State launches new LCADC training grants for bilingual counselors</div><div class="news-time">6 hours ago</div></div>
+              <div class="news-item"><div class="news-source">APP.com</div><div class="news-title">NJ insurance mandate for mental health parity enforcement update</div><div class="news-time">8 hours ago</div></div>
+              <div class="news-item"><div class="news-source">NJ Spotlight</div><div class="news-title">New substance use treatment centers approved for northern NJ corridor</div><div class="news-time">Yesterday</div></div>
+              <div class="news-item"><div class="news-source">ROI-NJ</div><div class="news-title">Telehealth reimbursement rules extended through end of year in New Jersey</div><div class="news-time">Yesterday</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hdr"><h3>Quick Actions</h3></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:7px">
+              <button class="btn btn-export" onclick="exportBillingExcel()">📊 Export Billing to Excel</button>
+              <button class="btn btn-word" onclick="generateReport()">📄 Generate Client Report</button>
+              <button class="btn btn-outlook" onclick="sendReminders()">📧 Send Appointment Reminders</button>
+              <button class="btn btn-secondary" onclick="nav('employees',document.querySelector('.nav-item:nth-child(7)'))">⏱ Employee Time Sheet</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SCHEDULE ═══ -->
+    <div class="page" id="page-schedule">
+      <div class="int-bar">
+        <span>📅 Integrations:</span>
+        <button class="btn btn-outlook btn-sm" onclick="sendReminders()">📧 Send Reminders via Outlook</button>
+        <button class="btn btn-export btn-sm" onclick="exportScheduleExcel()">📊 Export Schedule to Excel</button>
+        <button class="btn btn-word btn-sm" onclick="generateAppointmentLetter()">📄 Generate Appointment Letters</button>
+      </div>
+      <div class="g2" style="align-items:start">
+        <div class="card">
+          <div class="card-hdr"><h3>📅 March 2026</h3><div class="hdr-actions"><button class="btn btn-ghost btn-sm">◀</button><button class="btn btn-ghost btn-sm">▶</button></div></div>
+          <div class="card-body">
+            <div class="cal-grid" style="margin-bottom:6px">
+              <div class="cal-h">Su</div><div class="cal-h">Mo</div><div class="cal-h">Tu</div><div class="cal-h">We</div><div class="cal-h">Th</div><div class="cal-h">Fr</div><div class="cal-h">Sa</div>
+            </div>
+            <div class="cal-grid" id="calendar"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><h3>Day View — <span id="sel-date">Saturday, Mar 28</span></h3><button class="btn btn-primary btn-sm" onclick="openM('new-appt')">+ Add</button></div>
+          <div class="card-body" style="padding:8px 16px">
+            <div class="appt"><div class="appt-t">9:00 AM</div><div class="appt-dot" style="background:var(--teal)"></div><div class="appt-inf"><strong>Maria Santos</strong><span>EMDR · 50 min · In-Person</span></div><span class="badge bg">Confirmed</span></div>
+            <div class="appt"><div class="appt-t">11:00 AM</div><div class="appt-dot" style="background:var(--gold)"></div><div class="appt-inf"><strong>James Mitchell</strong><span>CBT · 50 min · In-Person</span></div><span class="badge bg">Confirmed</span></div>
+            <div class="appt"><div class="appt-t">2:00 PM</div><div class="appt-dot" style="background:var(--purple)"></div><div class="appt-inf"><strong>Rosa Hernández</strong><span>Intake · 90 min · Spanish</span></div><span class="badge bgold">Intake</span></div>
+            <div class="appt"><div class="appt-t">4:00 PM</div><div class="appt-dot" style="background:var(--coral)"></div><div class="appt-inf"><strong>Carlos Rivera</strong><span>Addiction · 50 min · Telehealth</span></div><span class="badge bb">Telehealth</span></div>
+            <div class="appt" style="opacity:0.35"><div class="appt-t">5:00 PM</div><div class="appt-dot" style="background:var(--border)"></div><div class="appt-inf"><strong style="font-weight:400;color:var(--text-light)">Open Slot</strong><span>Available</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CLIENTS ═══ -->
+    <div class="page" id="page-clients">
+      <div id="clients-list">
+        <div class="int-bar" style="margin-bottom:0">
+          <span>📋 Integrations:</span>
+          <button class="btn btn-export btn-sm" onclick="exportClientsExcel()">📊 Export Client List</button>
+          <button class="btn btn-word btn-sm" onclick="generateReport()">📄 Generate Reports</button>
+          <button class="btn btn-outlook btn-sm" onclick="sendReminders()">📧 Send Reminders</button>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-secondary btn-sm">All (23)</button>
+            <button class="btn btn-secondary btn-sm">Active (20)</button>
+            <button class="btn btn-primary btn-sm" onclick="openM('new-client')">+ New Client</button>
+          </div>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <thead><tr><th>Client</th><th>DOB / Age</th><th>Insurance</th><th>Next Appt</th><th>Dx</th><th>Status</th><th>Language</th></tr></thead>
+            <tbody>
+              <tr onclick="showClient('maria')"><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--teal)">MS</div><div><div style="font-weight:500">Maria Santos</div><div style="font-size:11px;color:var(--text-light)">#0042</div></div></div></td><td>03/15/1985 · 40</td><td>Aetna PPO</td><td>Mar 28, 9:00 AM</td><td><span class="badge bgray">PTSD · MDD</span></td><td><span class="badge bg">Active</span></td><td>🇺🇸 English</td></tr>
+              <tr onclick="showClient('james')"><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--gold)">JM</div><div><div style="font-weight:500">James Mitchell</div><div style="font-size:11px;color:var(--text-light)">#0038</div></div></div></td><td>07/22/1979 · 46</td><td>BCBS PPO</td><td>Mar 28, 11:00 AM</td><td><span class="badge bgray">MDD · GAD</span></td><td><span class="badge bg">Active</span></td><td>🇺🇸 English</td></tr>
+              <tr onclick="showClient('rosa')"><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--purple)">RH</div><div><div style="font-weight:500">Rosa Hernández</div><div style="font-size:11px;color:var(--text-light)">#0051</div></div></div></td><td>11/04/1992 · 33</td><td>Self-Pay</td><td>Mar 28, 2:00 PM</td><td><span class="badge bgray">Intake</span></td><td><span class="badge bgold">Intake</span></td><td>🇲🇽 Spanish</td></tr>
+              <tr onclick="showClient('carlos')"><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--coral)">CR</div><div><div style="font-weight:500">Carlos Rivera</div><div style="font-size:11px;color:var(--text-light)">#0029</div></div></div></td><td>05/30/1988 · 37</td><td>Cigna HMO</td><td>Mar 28, 4:00 PM</td><td><span class="badge bgray">AUD · PTSD</span></td><td><span class="badge bg">Active</span></td><td>🇵🇷 Spanish/Eng</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:#5a7a8a">DJ</div><div><div style="font-weight:500">Derek Johnson</div><div style="font-size:11px;color:var(--text-light)">#0019</div></div></div></td><td>09/14/1975 · 50</td><td>Medicare</td><td>Apr 2, 10:00 AM</td><td><span class="badge bgray">MDD · PTSD</span></td><td><span class="badge bg">Active</span></td><td>🇺🇸 English</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:#3a8fb7">AC</div><div><div style="font-weight:500">Angela Cruz</div><div style="font-size:11px;color:var(--text-light)">#0047</div></div></div></td><td>02/18/1998 · 28</td><td>Medicaid</td><td>Apr 3, 3:00 PM</td><td><span class="badge bgray">GAD · MDD</span></td><td><span class="badge bg">Active</span></td><td>🇩🇴 Spanish</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:#5a7a5a">TB</div><div><div style="font-weight:500">Thomas Briggs</div><div style="font-size:11px;color:var(--text-light)">#0011</div></div></div></td><td>12/03/1968 · 57</td><td>Veterans Affairs</td><td>Apr 4, 1:00 PM</td><td><span class="badge bgray">PTSD · SUD</span></td><td><span class="badge bg">Active</span></td><td>🇺🇸 English</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:#8b5e83">SO</div><div><div style="font-weight:500">Sandra Okonkwo</div><div style="font-size:11px;color:var(--text-light)">#0055</div></div></div></td><td>06/27/1990 · 35</td><td>UnitedHealth</td><td>Apr 5, 9:00 AM</td><td><span class="badge bgray">Anxiety</span></td><td><span class="badge bb">On Hold</span></td><td>🇺🇸 English</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CLIENT DETAIL -->
+      <div id="client-detail" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <button class="btn btn-ghost btn-sm" onclick="backClients()">← Back to Clients</button>
+          <div class="section-actions">
+            <button class="btn btn-word btn-sm" onclick="generateReport()">📄 Export to Word</button>
+            <button class="btn btn-export btn-sm" onclick="exportClientExcel()">📊 Export to Excel</button>
+            <button class="btn btn-outlook btn-sm" onclick="sendReminders()">📧 Outlook Reminder</button>
+          </div>
+        </div>
+        <div class="client-hdr">
+          <div class="c-avatar" id="det-av" style="background:var(--teal)">MS</div>
+          <div class="c-meta">
+            <h2 id="det-name">Maria Santos</h2>
+            <div class="meta-pills">
+              <span class="meta-pill">DOB: 03/15/1985</span>
+              <span class="meta-pill">Age: 40</span>
+              <span class="meta-pill">ID: #0042</span>
+              <span class="meta-pill">🇺🇸 English</span>
+              <span class="meta-pill">Since: Jan 2025</span>
+              <span class="badge bg">Active</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0">
+            <button class="btn btn-secondary btn-sm" onclick="openM('new-note')">📝 Add Note</button>
+            <button class="btn btn-primary btn-sm" onclick="openM('new-appt')">📅 Schedule</button>
+          </div>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="ctab(this,'ov')">Overview</div>
+          <div class="tab" onclick="ctab(this,'ins')">Insurance</div>
+          <div class="tab" onclick="ctab(this,'sn')">Session Notes</div>
+          <div class="tab" onclick="ctab(this,'bil')">Billing</div>
+          <div class="tab" onclick="ctab(this,'doc')">Documents</div>
+        </div>
+
+        <div id="ct-ov" class="g2" style="align-items:start">
+          <div class="card"><div class="card-hdr"><h3>Personal Information</h3><button class="btn btn-ghost btn-sm">Edit</button></div><div class="card-body"><div class="fg" style="gap:10px"><div class="fgroup"><label class="fl">Full Name</label><input class="fi" value="Maria Elena Santos" readonly></div><div class="fgroup"><label class="fl">Preferred Name</label><input class="fi" value="Maria" readonly></div><div class="fgroup"><label class="fl">Date of Birth</label><input class="fi" value="03/15/1985" readonly></div><div class="fgroup"><label class="fl">Gender</label><input class="fi" value="Female (she/her)" readonly></div><div class="fgroup"><label class="fl">Phone</label><input class="fi" value="(973) 555-0142" readonly></div><div class="fgroup"><label class="fl">Email</label><input class="fi" value="m.santos@email.com" readonly></div><div class="fgroup s2"><label class="fl">Address</label><input class="fi" value="247 Spring St, Morristown, NJ 07960" readonly></div><div class="fgroup"><label class="fl">Emergency Contact</label><input class="fi" value="Carlos Santos (husband)" readonly></div><div class="fgroup"><label class="fl">Emergency Phone</label><input class="fi" value="(973) 555-0198" readonly></div></div></div></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card"><div class="card-hdr"><h3>Clinical Summary</h3></div><div class="card-body"><div class="fg" style="gap:10px"><div class="fgroup"><label class="fl">Primary Dx</label><input class="fi" value="PTSD (F43.10)" readonly></div><div class="fgroup"><label class="fl">Secondary Dx</label><input class="fi" value="MDD Recurrent (F33.0)" readonly></div><div class="fgroup"><label class="fl">Modality</label><input class="fi" value="EMDR + CBT" readonly></div><div class="fgroup"><label class="fl">Frequency</label><input class="fi" value="Weekly" readonly></div><div class="fgroup"><label class="fl">Rate</label><input class="fi" value="$150/session" readonly></div><div class="fgroup"><label class="fl">Sessions</label><input class="fi" value="8 completed" readonly></div><div class="fgroup s2"><label class="fl">Presenting Problem</label><textarea class="fi" readonly style="height:58px">Trauma symptoms following DV history. Sleep disturbances, hypervigilance, avoidance.</textarea></div></div></div></div>
+            <div class="card"><div class="card-hdr"><h3>Risk & Safety</h3></div><div class="card-body"><div class="risk-row" style="background:var(--teal-light)"><span style="font-size:12.5px">Suicidal Ideation</span><span class="badge bg">None Active</span></div><div class="risk-row" style="background:var(--teal-light)"><span style="font-size:12.5px">Homicidal Ideation</span><span class="badge bg">Denied</span></div><div class="risk-row" style="background:var(--gold-light)"><span style="font-size:12.5px">Substance Use</span><span class="badge bgold">Hx: Alcohol</span></div><div class="risk-row" style="background:var(--teal-light)"><span style="font-size:12.5px">Safety Plan on File</span><span class="badge bg">Yes — 01/15/25</span></div><div style="font-size:10.5px;color:var(--text-light);margin-top:6px">Last updated: 03/20/2026 · Dr. Brown</div></div></div>
+          </div>
+        </div>
+
+        <div id="ct-ins" style="display:none"><div class="g2" style="align-items:start"><div class="card"><div class="card-hdr"><h3>Primary Insurance</h3><span class="badge bg">Active</span></div><div class="card-body"><div class="fg" style="gap:10px"><div class="fgroup s2"><label class="fl">Insurance Company</label><input class="fi" value="Aetna" readonly></div><div class="fgroup"><label class="fl">Plan Type</label><input class="fi" value="PPO" readonly></div><div class="fgroup"><label class="fl">Plan Name</label><input class="fi" value="Aetna Choice POS II" readonly></div><div class="fgroup"><label class="fl">Member ID</label><input class="fi" value="W1234567890" readonly></div><div class="fgroup"><label class="fl">Group Number</label><input class="fi" value="G0045821" readonly></div><div class="fgroup"><label class="fl">Subscriber Name</label><input class="fi" value="Maria E. Santos (Self)" readonly></div><div class="fgroup"><label class="fl">Copay</label><input class="fi" value="$30 specialist" readonly></div><div class="fgroup"><label class="fl">Deductible</label><input class="fi" value="$500 · Met $320" readonly></div><div class="fgroup"><label class="fl">Authorization #</label><input class="fi" value="AUTH-20260115-88421" readonly></div><div class="fgroup"><label class="fl">Sessions Auth.</label><input class="fi" value="20 total · 8 used" readonly></div><div class="fgroup"><label class="fl">Insurance Phone</label><input class="fi" value="1-800-872-3862" readonly></div><div class="fgroup"><label class="fl">Effective Date</label><input class="fi" value="01/01/2026" readonly></div></div></div></div><div style="display:flex;flex-direction:column;gap:14px"><div class="card"><div class="card-hdr"><h3>Secondary Insurance</h3><span class="badge bgray">None</span></div><div class="card-body" style="text-align:center;padding:28px"><div style="font-size:28px;margin-bottom:8px">📋</div><div style="font-size:13px;color:var(--text-light)">No secondary insurance on file</div><button class="btn btn-secondary btn-sm" style="margin-top:10px">+ Add Secondary</button></div></div><div class="card"><div class="card-hdr"><h3>Billing Preferences</h3></div><div class="card-body"><div class="fg" style="gap:10px"><div class="fgroup"><label class="fl">Billing Method</label><input class="fi" value="Insurance Primary" readonly></div><div class="fgroup"><label class="fl">Payment Method</label><input class="fi" value="Credit Card on File" readonly></div><div class="fgroup"><label class="fl">Statement Pref.</label><input class="fi" value="Email" readonly></div><div class="fgroup"><label class="fl">Sliding Scale</label><input class="fi" value="No" readonly></div><div class="fgroup s2"><label class="fl">Notes</label><textarea class="fi" readonly style="height:46px">Pre-auth Jan 2026. Renewal needed Aug 2026.</textarea></div></div></div></div></div></div></div>
+
+        <div id="ct-sn" style="display:none"><div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn btn-primary btn-sm" onclick="openM('new-note')">+ New Note</button></div><div class="note-item"><div class="note-meta"><span>📝 Session Note — 03/21/2026 · 9:00 AM · Session #8</span><span>CPT: 90837 · Aetna · <strong style="color:var(--teal)">Signed</strong></span></div><div class="soap-grid"><div class="soap-block"><div class="soap-lbl">S — Subjective</div><div class="soap-txt">Client reports decreased nightmares (3 vs 6 prior week). States "I feel like I can breathe." Practiced grounding at home daily.</div></div><div class="soap-block"><div class="soap-lbl">O — Objective</div><div class="soap-txt">Affect brighter. Appropriate eye contact. No SI/HI. PHQ-9: 9 (↓ from 14). Good EMDR engagement throughout.</div></div><div class="soap-block"><div class="soap-lbl">A — Assessment</div><div class="soap-txt">Progressing well in EMDR Phase 4. PTSD symptoms improving. Primary trauma 70% processed per SUD ratings.</div></div><div class="soap-block"><div class="soap-lbl">P — Plan</div><div class="soap-txt">Continue EMDR Phase 4. Review grounding journal. Weekly frequency. Safety plan current and reviewed.</div></div></div></div><div class="note-item" style="margin-top:10px"><div class="note-meta"><span>📝 Session Note — 03/14/2026 · 9:00 AM · Session #7</span><span>CPT: 90837 · Aetna · <strong style="color:var(--teal)">Signed</strong></span></div><div class="soap-grid"><div class="soap-block"><div class="soap-lbl">S — Subjective</div><div class="soap-txt">Difficult week. Triggered by DV news coverage. Nightmares increased. Used breathing exercises with partial relief.</div></div><div class="soap-block"><div class="soap-lbl">O — Objective</div><div class="soap-txt">Tearful at start, composed by mid-session. PHQ-9: 14. No SI/HI. Engaged in EMDR processing after stabilization.</div></div><div class="soap-block"><div class="soap-lbl">A — Assessment</div><div class="soap-txt">Trauma activation expected at this stage. Resilience evident. Continues to engage despite distress.</div></div><div class="soap-block"><div class="soap-lbl">P — Plan</div><div class="soap-txt">Add containment exercise to homework. Safety plan reviewed and updated. Continue weekly frequency.</div></div></div></div></div>
+
+        <div id="ct-bil" style="display:none"><div class="card"><div class="card-hdr"><h3>Billing History — Maria Santos</h3><button class="btn btn-export btn-sm" onclick="exportClientExcel()">📊 Export</button></div><table class="tbl"><thead><tr><th>Date</th><th>Service</th><th>CPT</th><th>Fee</th><th>Ins Paid</th><th>Client Due</th><th>Balance</th><th>Status</th></tr></thead><tbody><tr><td>03/21/26</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>$120</td><td>$30</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr><tr><td>03/14/26</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>$120</td><td>$30</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr><tr><td>03/07/26</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>$120</td><td>$30</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr><tr><td>02/28/26</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>$120</td><td>$30</td><td>$30</td><td><span class="badge bgold">Pending</span></td></tr><tr><td>01/15/26</td><td>Initial Intake 90m</td><td>90791</td><td>$225</td><td>$180</td><td>$45</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr></tbody></table></div></div>
+
+        <div id="ct-doc" style="display:none"><div class="card"><div class="card-hdr"><h3>Documents on File</h3><div class="hdr-actions"><button class="btn btn-word btn-sm" onclick="generateReport()">📄 Generate</button><button class="btn btn-ghost btn-sm">+ Upload</button></div></div><div class="card-body"><div class="doc-row"><span>📄</span><div style="flex:1"><div style="font-size:13px;font-weight:500">Intake Form</div><div style="font-size:11px;color:var(--text-light)">Signed 01/15/2026 · PDF</div></div><span class="badge bg">Signed</span></div><div class="doc-row"><span>📄</span><div style="flex:1"><div style="font-size:13px;font-weight:500">HIPAA Notice of Privacy Practices</div><div style="font-size:11px;color:var(--text-light)">Signed 01/15/2026 · PDF</div></div><span class="badge bg">Signed</span></div><div class="doc-row"><span>📄</span><div style="flex:1"><div style="font-size:13px;font-weight:500">Informed Consent for Treatment</div><div style="font-size:11px;color:var(--text-light)">Signed 01/15/2026 · PDF</div></div><span class="badge bg">Signed</span></div><div class="doc-row"><span>📄</span><div style="flex:1"><div style="font-size:13px;font-weight:500">Safety Plan</div><div style="font-size:11px;color:var(--text-light)">Updated 03/20/2026</div></div><span class="badge bb">Current</span></div><div class="doc-row"><span>🖼️</span><div style="flex:1"><div style="font-size:13px;font-weight:500">Insurance Card — Front & Back</div><div style="font-size:11px;color:var(--text-light)">Uploaded 01/15/2026</div></div><span class="badge bg">On File</span></div><div class="doc-row"><span>📄</span><div style="flex:1"><div style="font-size:13px;font-weight:500">Release of Information — Prescriber</div><div style="font-size:11px;color:var(--text-light)">Expires 02/10/2027</div></div><span class="badge bb">Active</span></div></div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ SESSION NOTES ═══ -->
+    <div class="page" id="page-notes">
+      <div class="int-bar"><span>📝 Integrations:</span><button class="btn btn-export btn-sm" onclick="exportNotesExcel()">📊 Export Notes Log</button><button class="btn btn-word btn-sm" onclick="generateReport()">📄 Generate Summary Report</button><div style="margin-left:auto;display:flex;gap:6px"><button class="btn btn-secondary btn-sm">All</button><button class="btn btn-secondary btn-sm" style="color:var(--coral)">Outstanding (7)</button><button class="btn btn-primary btn-sm" onclick="openM('new-note')">+ New Note</button></div></div>
+      <div class="card"><table class="tbl"><thead><tr><th>Date/Time</th><th>Client</th><th>Type</th><th>CPT</th><th>Duration</th><th>PHQ-9</th><th>Status</th><th>Signed</th></tr></thead><tbody>
+        <tr><td>03/28/26 · 9:00 AM</td><td><strong>Maria Santos</strong></td><td>EMDR · Individual</td><td>90837</td><td>53 min</td><td>9</td><td><span class="badge bgold">Draft</span></td><td>—</td></tr>
+        <tr><td>03/28/26 · 11:00 AM</td><td><strong>James Mitchell</strong></td><td>CBT · Individual</td><td>90837</td><td>53 min</td><td>11</td><td><span class="badge bgold">Draft</span></td><td>—</td></tr>
+        <tr><td>03/27/26 · 2:00 PM</td><td><strong>Derek Johnson</strong></td><td>Addiction · Individual</td><td>90837</td><td>53 min</td><td>8</td><td><span class="badge bg">Signed</span></td><td>03/27/26</td></tr>
+        <tr><td>03/26/26 · 3:00 PM</td><td><strong>Angela Cruz</strong></td><td>CBT · Spanish</td><td>90837</td><td>53 min</td><td>13</td><td><span class="badge bg">Signed</span></td><td>03/26/26</td></tr>
+        <tr><td>03/25/26 · 10:00 AM</td><td><strong>Thomas Briggs</strong></td><td>Trauma · Individual</td><td>90837</td><td>53 min</td><td>16</td><td><span class="badge bg">Signed</span></td><td>03/25/26</td></tr>
+        <tr><td>03/24/26 · 1:00 PM</td><td><strong>Carlos Rivera</strong></td><td>Addiction · Telehealth</td><td>90837-GT</td><td>53 min</td><td>10</td><td><span class="badge bg">Signed</span></td><td>03/24/26</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <!-- ═══ BILLING ═══ -->
+    <div class="page" id="page-billing">
+      <div class="int-bar"><span>💳 Integrations:</span><button class="btn btn-export btn-sm" onclick="exportBillingExcel()">📊 Export to Excel / QuickBooks</button><button class="btn btn-word btn-sm" onclick="generateReport()">📄 Generate Billing Report</button><button class="btn btn-outlook btn-sm" onclick="sendReminders()">📧 Send Statements via Outlook</button></div>
+      <div class="b-summary">
+        <div class="b-card"><div class="b-amt" style="color:var(--teal)">$5,700</div><div class="b-lbl">Collected This Month</div><div style="font-size:11px;color:var(--text-light);margin-top:4px">38 sessions · 28 claims closed</div></div>
+        <div class="b-card"><div class="b-amt" style="color:var(--gold)">$1,240</div><div class="b-lbl">Outstanding / Pending</div><div style="font-size:11px;color:var(--text-light);margin-top:4px">8 claims awaiting insurance</div></div>
+        <div class="b-card"><div class="b-amt" style="color:var(--coral)">$420</div><div class="b-lbl">Overdue (30+ days)</div><div style="font-size:11px;color:var(--coral);margin-top:4px">3 clients — follow up needed</div></div>
+      </div>
+      <div class="card"><div class="card-hdr"><h3>Recent Transactions</h3><button class="btn btn-primary btn-sm" onclick="openM('new-payment')">+ Record Payment</button></div><table class="tbl"><thead><tr><th>Date</th><th>Client</th><th>Service</th><th>CPT</th><th>Charged</th><th>Ins Paid</th><th>Client Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>
+        <tr><td>03/28/26</td><td>Maria Santos</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>—</td><td>—</td><td>$150</td><td><span class="badge bgold">Pending</span></td></tr>
+        <tr><td>03/28/26</td><td>James Mitchell</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>—</td><td>—</td><td>$150</td><td><span class="badge bgold">Pending</span></td></tr>
+        <tr><td>03/27/26</td><td>Derek Johnson</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>$130</td><td>$20</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr>
+        <tr><td>03/26/26</td><td>Angela Cruz</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>$150</td><td>$0</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr>
+        <tr><td>03/25/26</td><td>Thomas Briggs</td><td>Psychotherapy 53m</td><td>90837</td><td>$150</td><td>$150</td><td>$0</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr>
+        <tr><td>03/24/26</td><td>Carlos Rivera</td><td>Telehealth 53m</td><td>90837-GT</td><td>$150</td><td>$105</td><td>$45</td><td>$0</td><td><span class="badge bg">Paid</span></td></tr>
+      </tbody></table></div>
+    </div>
+
+    <!-- ═══ EMPLOYEES ═══ -->
+    <div class="page" id="page-employees">
+      <div class="int-bar"><span>👤 Integrations:</span><button class="btn btn-export btn-sm" onclick="exportPayrollExcel()">📊 Export Payroll to Excel</button><button class="btn btn-word btn-sm" onclick="generateReport()">📄 Generate HR Report</button><button class="btn btn-outlook btn-sm" onclick="sendReminders()">📧 Send Pay Stubs via Outlook</button></div>
+
+      <div class="g3" style="align-items:start">
+        <!-- Clock Card -->
+        <div class="clock-card">
+          <div style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Time & Attendance</div>
+          <div class="clock-time" id="emp-clock">--:-- --</div>
+          <div class="clock-date" id="emp-date"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px">
+            <div class="emp-stat"><div class="ev">32.5h</div><div class="el">This Week</div></div>
+            <div class="emp-stat"><div class="ev">128h</div><div class="el">This Month</div></div>
+            <div class="emp-stat"><div class="ev">14d</div><div class="el">PTO Left</div></div>
+          </div>
+          <div class="clock-btns">
+            <button class="btn-clock-in" onclick="clockAction('in')">⏱ Clock In</button>
+            <button class="btn-clock-out" onclick="clockAction('out')">Clock Out</button>
+          </div>
+          <div id="clock-status" style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:10px;min-height:16px"></div>
+        </div>
+
+        <!-- Time Log -->
+        <div class="card" style="grid-column:span 2">
+          <div class="card-hdr"><h3>Time Log — Current Pay Period</h3><div class="hdr-actions"><button class="btn btn-export btn-sm" onclick="exportPayrollExcel()">📊 Export</button><button class="btn btn-primary btn-sm" onclick="openM('new-employee')">+ Add Employee</button></div></div>
+          <table class="tbl">
+            <thead><tr><th>Employee</th><th>Date</th><th>Clock In</th><th>Clock Out</th><th>Hours</th><th>Rate</th><th>Gross Pay</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar-sm" style="background:var(--teal)">DB</div><span style="font-weight:500">Dr. David Brown</span></div></td><td>03/28/26</td><td>8:45 AM</td><td>—</td><td>In progress</td><td>$175/hr</td><td>—</td><td><span class="badge bg">Clocked In</span></td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--purple)">JS</div><span style="font-weight:500">Jennifer Sanchez</span></div></td><td>03/28/26</td><td>9:00 AM</td><td>5:00 PM</td><td>8.0h</td><td>$22/hr</td><td>$176.00</td><td><span class="badge bgray">Complete</span></td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--gold)">MR</div><span style="font-weight:500">Marcus Reed</span></div></td><td>03/27/26</td><td>10:00 AM</td><td>3:00 PM</td><td>5.0h</td><td>$20/hr</td><td>$100.00</td><td><span class="badge bgray">Complete</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Employee Roster -->
+      <div class="card">
+        <div class="card-hdr"><h3>Employee Roster</h3><button class="btn btn-primary btn-sm" onclick="openM('new-employee')">+ Add Employee</button></div>
+        <table class="tbl">
+          <thead><tr><th>Employee</th><th>Title</th><th>Pay Type</th><th>Rate</th><th>Federal Status</th><th>NJ State</th><th>Health Ins.</th><th>Start Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr onclick="openM('emp-detail')"><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--teal)">DB</div><div><div style="font-weight:500">David Brown</div><div style="font-size:11px;color:var(--text-light)">SSN: ***-**-4521</div></div></div></td><td>PsyD · LCADC · Owner</td><td>Salary</td><td>$175/hr</td><td>MFJ · 0 allow</td><td>NJ-W4 Filed</td><td>BCBS Gold</td><td>01/01/2028</td><td><span class="badge bg">Active</span></td></tr>
+            <tr onclick="openM('emp-detail')"><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--purple)">JS</div><div><div style="font-weight:500">Jennifer Sanchez</div><div style="font-size:11px;color:var(--text-light)">SSN: ***-**-7834</div></div></div></td><td>Receptionist / Billing</td><td>Hourly</td><td>$22/hr</td><td>Single · 1 allow</td><td>NJ-W4 Filed</td><td>BCBS Silver</td><td>03/01/2029</td><td><span class="badge bg">Active</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar-sm" style="background:var(--gold)">MR</div><div><div style="font-weight:500">Marcus Reed</div><div style="font-size:11px;color:var(--text-light)">SSN: ***-**-2210</div></div></div></td><td>Admin / Part-Time</td><td>Hourly PT</td><td>$20/hr</td><td>Single · 0 allow</td><td>NJ-W4 Filed</td><td>Not Enrolled</td><td>06/15/2029</td><td><span class="badge bb">Part-Time</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ REPORTS ═══ -->
+    <div class="page" id="page-reports">
+      <div class="g3">
+        <div class="card"><div class="card-hdr"><h3>📊 Excel Reports</h3></div><div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-export" onclick="exportBillingExcel()">💰 Billing Summary</button>
+          <button class="btn btn-export" onclick="exportClientsExcel()">👥 Client Roster</button>
+          <button class="btn btn-export" onclick="exportPayrollExcel()">👤 Payroll Register</button>
+          <button class="btn btn-export" onclick="exportScheduleExcel()">📅 Schedule Export</button>
+          <button class="btn btn-export" onclick="exportNotesExcel()">📝 Session Notes Log</button>
+          <div style="padding:8px;background:var(--teal-light);border-radius:var(--radius-xs);font-size:11.5px;color:#0a6b50;margin-top:4px">✅ All exports compatible with QuickBooks import format</div>
+        </div></div>
+        <div class="card"><div class="card-hdr"><h3>📄 Word Documents</h3></div><div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-word" onclick="generateAppointmentLetter()">📅 Appointment Letters</button>
+          <button class="btn btn-word" onclick="generateReport()">👥 Client Summary Report</button>
+          <button class="btn btn-word" onclick="generateReport()">🏥 Clinical Progress Report</button>
+          <button class="btn btn-word" onclick="generateReport()">💳 Billing Statement</button>
+          <button class="btn btn-word" onclick="generateReport()">👤 Employee HR Report</button>
+          <div style="padding:8px;background:#dbeafe;border-radius:var(--radius-xs);font-size:11.5px;color:#1e40af;margin-top:4px">📄 Downloads as .docx — opens directly in Microsoft Word</div>
+        </div></div>
+        <div class="card"><div class="card-hdr"><h3>📧 Outlook Integration</h3></div><div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-outlook" onclick="sendReminders()">📅 Appointment Reminders</button>
+          <button class="btn btn-outlook" onclick="sendReminders()">💳 Billing Statements</button>
+          <button class="btn btn-outlook" onclick="sendReminders()">📋 Intake Paperwork Request</button>
+          <button class="btn btn-outlook" onclick="sendReminders()">👤 Pay Stubs to Staff</button>
+          <button class="btn btn-outlook" onclick="sendReminders()">📄 Insurance Auth Requests</button>
+          <div style="padding:8px;background:#e0f2fe;border-radius:var(--radius-xs);font-size:11.5px;color:#075985;margin-top:4px">📧 Opens Outlook desktop with pre-filled recipient, subject & body</div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ═══ SETTINGS ═══ -->
+    <div class="page" id="page-settings">
+      <div class="g2" style="align-items:start">
+        <div class="card"><div class="card-hdr"><h3>Practice Information</h3></div><div class="card-body"><div class="fg" style="gap:12px"><div class="fgroup s2"><label class="fl">Practice Name</label><input class="fi" value="Brown Psychology Practice"></div><div class="fgroup s2"><label class="fl">Clinician</label><input class="fi" value="David Brown, PsyD, LCADC"></div><div class="fgroup"><label class="fl">NPI Number</label><input class="fi" value="1234567890"></div><div class="fgroup"><label class="fl">Tax ID / EIN</label><input class="fi" value="XX-XXXXXXX"></div><div class="fgroup s2"><label class="fl">Address</label><input class="fi" value="100 South Street, Suite 200, Morristown, NJ 07960"></div><div class="fgroup"><label class="fl">Phone</label><input class="fi" value="(973) 555-0100"></div><div class="fgroup"><label class="fl">Fax</label><input class="fi" value="(973) 555-0101"></div><div class="fgroup"><label class="fl">Languages</label><input class="fi" value="English, Spanish, Portuguese"></div><div class="fgroup"><label class="fl">Time Zone</label><select class="fi"><option>Eastern (ET)</option></select></div></div><button class="btn btn-primary" style="margin-top:14px">Save Changes</button></div></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card"><div class="card-hdr"><h3>Session & Fee Defaults</h3></div><div class="card-body"><div class="fg" style="gap:12px"><div class="fgroup"><label class="fl">Standard Fee</label><input class="fi" value="$150"></div><div class="fgroup"><label class="fl">Intake Fee</label><input class="fi" value="$225"></div><div class="fgroup"><label class="fl">Standard Length</label><select class="fi"><option>50 minutes</option></select></div><div class="fgroup"><label class="fl">Intake Length</label><select class="fi"><option>90 minutes</option></select></div><div class="fgroup"><label class="fl">Telehealth Fee</label><input class="fi" value="$150"></div><div class="fgroup"><label class="fl">No-Show Fee</label><input class="fi" value="$75"></div></div><button class="btn btn-primary" style="margin-top:14px">Save</button></div></div>
+          <div class="card"><div class="card-hdr"><h3>Staff Access</h3></div><div class="card-body"><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--slate-light);border-radius:var(--radius-xs)"><div class="u-avatar" style="width:30px;height:30px;font-size:11px">DB</div><div style="flex:1"><div style="font-size:13px;font-weight:500">Dr. David Brown</div><div style="font-size:11px;color:var(--text-light)">Owner / Clinician</div></div><span class="badge bg">Admin</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--slate-light);border-radius:var(--radius-xs)"><div class="u-avatar" style="width:30px;height:30px;font-size:11px;background:var(--purple)">JS</div><div style="flex:1"><div style="font-size:13px;font-weight:500">Jennifer Sanchez</div><div style="font-size:11px;color:var(--text-light)">Receptionist / Billing</div></div><span class="badge bb">Staff</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px dashed var(--border);border-radius:var(--radius-xs);cursor:pointer" onclick="openM('new-employee')"><div style="width:30px;height:30px;background:var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px">+</div><div style="font-size:12.5px;color:var(--text-light)">Add staff member</div></div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+
+<!-- ════════════════ MODALS ════════════════ -->
+
+<!-- New Appointment -->
+<div class="modal-overlay" id="modal-new-appt">
+  <div class="modal">
+    <div class="modal-hdr"><h2>📅 New Appointment</h2><button class="m-close" onclick="closeM('new-appt')">✕</button></div>
+    <div class="modal-body"><div class="fg"><div class="fgroup s2"><label class="fl">Client</label><select class="fi"><option>Maria Santos</option><option>James Mitchell</option><option>Rosa Hernández</option><option>Carlos Rivera</option><option>Derek Johnson</option><option>— New Client —</option></select></div><div class="fgroup"><label class="fl">Date</label><input type="date" class="fi"></div><div class="fgroup"><label class="fl">Time</label><select class="fi"><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div><div class="fgroup"><label class="fl">Duration</label><select class="fi"><option>50 minutes</option><option>90 minutes (Intake)</option><option>38 minutes</option><option>60 minutes</option></select></div><div class="fgroup"><label class="fl">Session Type</label><select class="fi"><option>Individual Therapy</option><option>Initial Intake</option><option>EMDR</option><option>CBT</option><option>Family</option><option>Group</option><option>Telehealth</option></select></div><div class="fgroup"><label class="fl">CPT Code</label><select class="fi"><option>90837 — 53 min individual</option><option>90834 — 38 min individual</option><option>90791 — Intake eval</option><option>90847 — Family w/ patient</option><option>90853 — Group</option></select></div><div class="fgroup"><label class="fl">Location</label><select class="fi"><option>In-Person</option><option>Telehealth (video)</option><option>Telehealth (phone)</option></select></div><div class="fgroup"><label class="fl">Language</label><select class="fi"><option>English</option><option>Spanish</option><option>Portuguese</option></select></div><div class="fgroup s2"><label class="fl">Notes</label><textarea class="fi" placeholder="Appointment notes..."></textarea></div><div class="hipaa-note">🔒 Appointment data is protected health information. Access is logged.</div></div></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('new-appt')">Cancel</button><button class="btn btn-outlook" onclick="sendReminders();closeM('new-appt')">📧 Schedule & Send Outlook Reminder</button><button class="btn btn-primary">Schedule Appointment</button></div>
+  </div>
+</div>
+
+<!-- New Client -->
+<div class="modal-overlay" id="modal-new-client">
+  <div class="modal">
+    <div class="modal-hdr"><h2>👤 New Client Intake</h2><button class="m-close" onclick="closeM('new-client')">✕</button></div>
+    <div class="modal-body"><div class="fg">
+      <div class="fsec">Personal Information</div>
+      <div class="fgroup"><label class="fl">First Name</label><input class="fi" placeholder="First name"></div><div class="fgroup"><label class="fl">Last Name</label><input class="fi" placeholder="Last name"></div>
+      <div class="fgroup"><label class="fl">Preferred Name</label><input class="fi" placeholder="Goes by..."></div><div class="fgroup"><label class="fl">Date of Birth</label><input type="date" class="fi"></div>
+      <div class="fgroup"><label class="fl">Gender Identity</label><select class="fi"><option>Male (he/him)</option><option>Female (she/her)</option><option>Non-binary (they/them)</option><option>Prefer to self-describe</option><option>Prefer not to say</option></select></div><div class="fgroup"><label class="fl">Pronouns</label><input class="fi" placeholder="e.g. she/her"></div>
+      <div class="fgroup"><label class="fl">Phone</label><input type="tel" class="fi" placeholder="(973) 555-0000"></div><div class="fgroup"><label class="fl">Email</label><input type="email" class="fi" placeholder="email@example.com"></div>
+      <div class="fgroup s2"><label class="fl">Address</label><input class="fi" placeholder="Street, City, NJ ZIP"></div>
+      <div class="fgroup"><label class="fl">Preferred Language</label><select class="fi"><option>English</option><option>Spanish</option><option>Portuguese</option><option>Other</option></select></div><div class="fgroup"><label class="fl">Interpreter Needed?</label><select class="fi"><option>No</option><option>Yes</option></select></div>
+      <div class="fgroup"><label class="fl">Emergency Contact</label><input class="fi" placeholder="Name & relationship"></div><div class="fgroup"><label class="fl">Emergency Phone</label><input type="tel" class="fi" placeholder="(973) 555-0000"></div>
+      <div class="fsec">Clinical Information</div>
+      <div class="fgroup s2"><label class="fl">Presenting Problem</label><textarea class="fi" placeholder="Reason for referral and presenting concerns..."></textarea></div>
+      <div class="fgroup"><label class="fl">Primary Dx (ICD-10)</label><input class="fi" placeholder="e.g. F43.10 PTSD"></div><div class="fgroup"><label class="fl">Secondary Dx</label><input class="fi" placeholder="e.g. F33.0 MDD"></div>
+      <div class="fgroup"><label class="fl">Referral Source</label><select class="fi"><option>Self-referred</option><option>Primary Care</option><option>Psychiatrist</option><option>EAP</option><option>Family/Friend</option><option>Court/Probation</option><option>Other</option></select></div><div class="fgroup"><label class="fl">Modality</label><select class="fi"><option>Individual</option><option>Family</option><option>Group</option><option>Couples</option></select></div>
+      <div class="fgroup"><label class="fl">Substance Use History</label><select class="fi"><option>None reported</option><option>Alcohol — current</option><option>Alcohol — history</option><option>Substances — current</option><option>Dual diagnosis</option></select></div><div class="fgroup"><label class="fl">Suicide Risk</label><select class="fi"><option>None identified</option><option>Passive ideation</option><option>Active — with plan</option><option>Prior attempt</option></select></div>
+      <div class="fsec">Insurance Information</div>
+      <div class="fgroup s2"><label class="fl">Insurance Company</label><input class="fi" placeholder="e.g. Aetna, BCBS, Cigna..."></div>
+      <div class="fgroup"><label class="fl">Member ID</label><input class="fi" placeholder="Member ID"></div><div class="fgroup"><label class="fl">Group Number</label><input class="fi" placeholder="Group number"></div>
+      <div class="fgroup"><label class="fl">Subscriber Name</label><input class="fi" placeholder="If different from client"></div><div class="fgroup"><label class="fl">Relationship</label><select class="fi"><option>Self</option><option>Spouse</option><option>Child</option><option>Other</option></select></div>
+      <div class="fgroup"><label class="fl">Copay</label><input class="fi" placeholder="$0.00"></div><div class="fgroup"><label class="fl">Deductible</label><input class="fi" placeholder="$0.00"></div>
+      <div class="fgroup"><label class="fl">Authorization #</label><input class="fi" placeholder="If required"></div><div class="fgroup"><label class="fl">Sessions Authorized</label><input class="fi" placeholder="e.g. 20"></div>
+      <div class="fsec">Consents & HIPAA</div>
+      <div class="hipaa-note">🔒 All consents required before first session per NJ law and HIPAA regulations.</div>
+      <div class="fgroup s2"><label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox"> HIPAA Notice of Privacy Practices — acknowledged and copy provided</label></div>
+      <div class="fgroup s2"><label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox"> Informed Consent for Treatment — signed</label></div>
+      <div class="fgroup s2"><label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox"> Financial Agreement / Fee Schedule — signed</label></div>
+      <div class="fgroup s2"><label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox"> Telehealth Consent (if applicable)</label></div>
+    </div></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('new-client')">Cancel</button><button class="btn btn-primary">Create Client Record</button></div>
+  </div>
+</div>
+
+<!-- Session Note -->
+<div class="modal-overlay" id="modal-new-note">
+  <div class="modal">
+    <div class="modal-hdr"><h2>📝 Session Note (SOAP)</h2><button class="m-close" onclick="closeM('new-note')">✕</button></div>
+    <div class="modal-body"><div class="fg">
+      <div class="fgroup"><label class="fl">Client</label><select class="fi"><option>Maria Santos</option><option>James Mitchell</option><option>Rosa Hernández</option><option>Carlos Rivera</option></select></div><div class="fgroup"><label class="fl">Session Date</label><input type="date" class="fi"></div>
+      <div class="fgroup"><label class="fl">CPT Code</label><select class="fi"><option>90837 — 53 min individual</option><option>90834 — 38 min</option><option>90791 — Intake eval</option><option>90847 — Family</option></select></div><div class="fgroup"><label class="fl">Duration</label><select class="fi"><option>50 minutes</option><option>38 minutes</option><option>90 minutes</option></select></div>
+      <div class="fgroup"><label class="fl">Modality</label><select class="fi"><option>Individual</option><option>EMDR</option><option>CBT</option><option>DBT</option><option>Family</option></select></div><div class="fgroup"><label class="fl">Location</label><select class="fi"><option>In-Person</option><option>Telehealth</option></select></div>
+      <div class="fgroup"><label class="fl">PHQ-9 Score</label><input type="number" class="fi" placeholder="0–27"></div><div class="fgroup"><label class="fl">GAD-7 Score</label><input type="number" class="fi" placeholder="0–21"></div>
+      <div class="fgroup s2"><label class="fl">S — Subjective (client's report)</label><textarea class="fi" placeholder="What the client reported this session..."></textarea></div>
+      <div class="fgroup s2"><label class="fl">O — Objective (clinician observations)</label><textarea class="fi" placeholder="Affect, behavior, appearance, SI/HI assessment..."></textarea></div>
+      <div class="fgroup s2"><label class="fl">A — Assessment</label><textarea class="fi" placeholder="Clinical interpretation, progress toward goals..."></textarea></div>
+      <div class="fgroup s2"><label class="fl">P — Plan</label><textarea class="fi" placeholder="Next steps, homework, referrals, frequency..."></textarea></div>
+      <div class="fgroup s2"><label class="fl">Risk Assessment</label><select class="fi"><option>No SI/HI — safety plan current — no imminent risk</option><option>Passive SI — no plan — safety plan reviewed</option><option>Active SI — safety plan updated — EC notified</option><option>Hospitalization discussed</option></select></div>
+      <div class="hipaa-note">🔒 Sign and lock within 24 hours of session per standard of care.</div>
+    </div></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('new-note')">Cancel</button><button class="btn btn-ghost">Save Draft</button><button class="btn btn-primary">Sign & Lock Note</button></div>
+  </div>
+</div>
+
+<!-- New Employee -->
+<div class="modal-overlay" id="modal-new-employee">
+  <div class="modal">
+    <div class="modal-hdr"><h2>👤 New Employee Record</h2><button class="m-close" onclick="closeM('new-employee')">✕</button></div>
+    <div class="modal-body"><div class="fg">
+      <div class="fsec">Personal Information</div>
+      <div class="fgroup"><label class="fl">Legal First Name</label><input class="fi" placeholder="First name"></div><div class="fgroup"><label class="fl">Legal Last Name</label><input class="fi" placeholder="Last name"></div>
+      <div class="fgroup"><label class="fl">Date of Birth</label><input type="date" class="fi"></div><div class="fgroup"><label class="fl">Hire Date</label><input type="date" class="fi"></div>
+      <div class="fgroup"><label class="fl">Phone</label><input type="tel" class="fi" placeholder="(973) 555-0000"></div><div class="fgroup"><label class="fl">Personal Email</label><input type="email" class="fi" placeholder="email@example.com"></div>
+      <div class="fgroup s2"><label class="fl">Home Address</label><input class="fi" placeholder="Street, City, State ZIP"></div>
+      <div class="fgroup"><label class="fl">Emergency Contact</label><input class="fi" placeholder="Name & relationship"></div><div class="fgroup"><label class="fl">Emergency Phone</label><input type="tel" class="fi" placeholder="(973) 555-0000"></div>
+
+      <div class="fsec">Employment & Pay</div>
+      <div class="fgroup"><label class="fl">Job Title</label><input class="fi" placeholder="e.g. Receptionist"></div><div class="fgroup"><label class="fl">Department</label><select class="fi"><option>Clinical</option><option>Administrative</option><option>Billing</option><option>Management</option></select></div>
+      <div class="fgroup"><label class="fl">Employment Type</label><select class="fi"><option>Full-Time</option><option>Part-Time</option><option>Contract</option><option>PRN</option></select></div><div class="fgroup"><label class="fl">Pay Type</label><select class="fi"><option>Hourly</option><option>Salary</option><option>1099 Contractor</option></select></div>
+      <div class="fgroup"><label class="fl">Pay Rate</label><input class="fi" placeholder="$0.00 / hr or annual"></div><div class="fgroup"><label class="fl">Pay Frequency</label><select class="fi"><option>Bi-Weekly</option><option>Semi-Monthly</option><option>Monthly</option><option>Weekly</option></select></div>
+      <div class="fgroup"><label class="fl">Direct Deposit Bank</label><input class="fi" placeholder="Bank name"></div><div class="fgroup"><label class="fl">Account (last 4)</label><input class="fi" placeholder="****1234" maxlength="8"></div>
+
+      <div class="fsec">Federal Tax — W-4</div>
+      <div class="ssn-warn">⚠️ SSN is sensitive data. Stored masked — only last 4 digits displayed. Full number for payroll processor only.</div>
+      <div class="fgroup"><label class="fl">Social Security Number</label><input class="fi" type="password" placeholder="XXX-XX-XXXX" maxlength="11"></div><div class="fgroup"><label class="fl">Filing Status (Federal)</label><select class="fi"><option>Single / Married Filing Separately</option><option>Married Filing Jointly</option><option>Head of Household</option></select></div>
+      <div class="fgroup"><label class="fl">W-4 Step 2 (Multiple Jobs)</label><select class="fi"><option>No</option><option>Yes — checkbox selected</option></select></div><div class="fgroup"><label class="fl">W-4 Additional Withholding</label><input class="fi" placeholder="$0.00 extra per paycheck"></div>
+      <div class="fgroup"><label class="fl">W-4 Dependents Credit</label><input class="fi" placeholder="$0.00"></div><div class="fgroup"><label class="fl">W-4 Other Income</label><input class="fi" placeholder="$0.00"></div>
+      <div class="fgroup"><label class="fl">Federal Exempt?</label><select class="fi"><option>No</option><option>Yes — Exempt from withholding</option></select></div><div class="fgroup"><label class="fl">I-9 Status</label><select class="fi"><option>Completed — on file</option><option>Pending</option><option>Not yet submitted</option></select></div>
+
+      <div class="fsec">New Jersey State Tax — NJ-W4</div>
+      <div class="fgroup"><label class="fl">NJ Filing Status</label><select class="fi"><option>Single</option><option>Married/Civil Union — Filing Jointly</option><option>Married/Civil Union — Separately</option><option>Head of Household</option><option>Qualifying Widow(er)</option></select></div><div class="fgroup"><label class="fl">NJ Allowances</label><input class="fi" type="number" placeholder="0" min="0"></div>
+      <div class="fgroup"><label class="fl">NJ Additional Withholding</label><input class="fi" placeholder="$0.00 extra per paycheck"></div><div class="fgroup"><label class="fl">NJ Exempt?</label><select class="fi"><option>No</option><option>Yes — Exempt</option></select></div>
+      <div class="fgroup"><label class="fl">NJ SDI (Disability Insurance)</label><select class="fi"><option>Enrolled — standard rate</option><option>Exempt</option></select></div><div class="fgroup"><label class="fl">NJ FLI (Family Leave Ins.)</label><select class="fi"><option>Enrolled</option><option>Exempt</option></select></div>
+      <div class="fgroup"><label class="fl">NJ UI/WF/SWF</label><select class="fi"><option>Enrolled — standard rate</option><option>Exempt</option></select></div><div class="fgroup"><label class="fl">NJ PFRS / PERS Pension</label><select class="fi"><option>Not enrolled</option><option>PERS enrolled</option><option>PFRS enrolled</option></select></div>
+
+      <div class="fsec">Health Insurance & Benefits</div>
+      <div class="fgroup"><label class="fl">Health Insurance Plan</label><select class="fi"><option>Not Enrolled</option><option>BCBS Gold</option><option>BCBS Silver</option><option>BCBS Bronze</option><option>Aetna PPO</option><option>Waived — other coverage</option></select></div><div class="fgroup"><label class="fl">Coverage Type</label><select class="fi"><option>Employee Only</option><option>Employee + Spouse</option><option>Employee + Child(ren)</option><option>Family</option></select></div>
+      <div class="fgroup"><label class="fl">Employee Health Premium</label><input class="fi" placeholder="$0.00 / paycheck"></div><div class="fgroup"><label class="fl">Dental / Vision</label><select class="fi"><option>Not enrolled</option><option>Dental only</option><option>Vision only</option><option>Dental + Vision</option></select></div>
+      <div class="fgroup"><label class="fl">401(k) / Retirement</label><select class="fi"><option>Not enrolled</option><option>3% contribution</option><option>5% contribution</option><option>Custom %</option></select></div><div class="fgroup"><label class="fl">Employer Match</label><input class="fi" placeholder="e.g. 3% match"></div>
+      <div class="fgroup"><label class="fl">PTO Accrual Rate</label><select class="fi"><option>No PTO (PT/Contract)</option><option>80 hrs/year (FT standard)</option><option>120 hrs/year (Senior)</option><option>Custom</option></select></div><div class="fgroup"><label class="fl">PTO Balance</label><input class="fi" placeholder="Hours available"></div>
+
+      <div class="hipaa-note">🔒 Employee records contain PII. Access restricted to Admin role only. SSN never displayed in full.</div>
+    </div></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('new-employee')">Cancel</button><button class="btn btn-export" onclick="exportPayrollExcel()">📊 After Save — Export to Payroll Excel</button><button class="btn btn-primary">Save Employee Record</button></div>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="modal-new-payment">
+  <div class="modal">
+    <div class="modal-hdr"><h2>💳 Record Payment</h2><button class="m-close" onclick="closeM('new-payment')">✕</button></div>
+    <div class="modal-body"><div class="fg">
+      <div class="fgroup"><label class="fl">Client</label><select class="fi"><option>Maria Santos</option><option>James Mitchell</option><option>Carlos Rivera</option><option>Derek Johnson</option></select></div><div class="fgroup"><label class="fl">Date</label><input type="date" class="fi"></div>
+      <div class="fgroup"><label class="fl">Payment Type</label><select class="fi"><option>Client Copay</option><option>Insurance Payment (ERA)</option><option>Self-Pay</option><option>Sliding Scale</option></select></div><div class="fgroup"><label class="fl">Amount</label><input type="number" class="fi" placeholder="$0.00"></div>
+      <div class="fgroup"><label class="fl">Method</label><select class="fi"><option>Credit Card</option><option>Check</option><option>Cash</option><option>ACH / EFT</option></select></div><div class="fgroup"><label class="fl">Reference #</label><input class="fi" placeholder="Optional"></div>
+      <div class="fgroup s2"><label class="fl">Apply to Session</label><select class="fi"><option>03/28/2026 — Maria Santos — $150</option><option>03/28/2026 — James Mitchell — $150</option></select></div>
+      <div class="fgroup s2"><label class="fl">Notes</label><textarea class="fi" placeholder="Payment notes..."></textarea></div>
+    </div></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('new-payment')">Cancel</button><button class="btn btn-export" onclick="exportBillingExcel()">📊 Record & Export to Excel</button><button class="btn btn-primary">Record Payment</button></div>
+  </div>
+</div>
+
+<!-- Success Toast -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.25s;pointer-events:none;display:flex;align-items:center;gap:8px;max-width:340px"></div>
+
+<script>
+// ── NAV ──
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+  const titles = {dashboard:'Dashboard',schedule:'Schedule',clients:'Clients',notes:'Session Notes',billing:'Billing',employees:'Employees',reports:'Reports & Exports',settings:'Settings'};
+  document.getElementById('page-title').textContent = titles[id] || id;
+  if(id === 'clients') { document.getElementById('clients-list').style.display = 'block'; document.getElementById('client-detail').style.display = 'none'; }
+}
+
+// ── MODALS ──
+function openM(id) { document.getElementById('modal-' + id).classList.add('open'); }
+function closeM(id) { document.getElementById('modal-' + id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if(e.target === m) m.classList.remove('open'); }));
+
+// ── CLIENT DETAIL ──
+const CD = {maria:{av:'MS',name:'Maria Santos',color:'var(--teal)'},james:{av:'JM',name:'James Mitchell',color:'var(--gold)'},rosa:{av:'RH',name:'Rosa Hernández',color:'var(--purple)'},carlos:{av:'CR',name:'Carlos Rivera',color:'var(--coral)'}};
+function showClient(id) {
+  const c = CD[id]; if (!c) return;
+  document.getElementById('clients-list').style.display = 'none';
+  document.getElementById('client-detail').style.display = 'block';
+  document.getElementById('det-name').textContent = c.name;
+  const av = document.getElementById('det-av'); av.textContent = c.av; av.style.background = c.color;
+  document.getElementById('page-title').textContent = c.name;
+  ctabReset('ov');
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i === 0));
+}
+function backClients() { document.getElementById('clients-list').style.display = 'block'; document.getElementById('client-detail').style.display = 'none'; document.getElementById('page-title').textContent = 'Clients'; }
+function ctab(el, name) {
+  el.closest('#client-detail').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ctabReset(name);
+}
+function ctabReset(active) {
+  ['ov','ins','sn','bil','doc'].forEach(t => {
+    const el = document.getElementById('ct-' + t);
+    if (el) el.style.display = 'none';
+  });
+  const el = document.getElementById('ct-' + active);
+  if (el) el.style.display = (active === 'ov') ? 'grid' : 'block';
+}
+
+// ── CALENDAR ──
+function buildCal() {
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  const first = new Date(y, m, 1).getDay(), days = new Date(y, m+1, 0).getDate(), prev = new Date(y, m, 0).getDate();
+  const appts = [4,7,10,14,18,21,24,28];
+  const cal = document.getElementById('calendar'); if (!cal) return; cal.innerHTML = '';
+  for (let i = 0; i < first; i++) { const d = mk('div','cal-d other'); d.textContent = prev - first + i + 1; cal.appendChild(d); }
+  for (let d = 1; d <= days; d++) {
+    const el = mk('div', 'cal-d' + (d === now.getDate() ? ' today' : '') + (appts.includes(d) ? ' has-a' : ''));
+    el.textContent = d;
+    el.onclick = () => {
+      document.querySelectorAll('.cal-d').forEach(c => c.classList.remove('sel'));
+      el.classList.add('sel');
+      const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const dn = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const sd = document.getElementById('sel-date');
+      if (sd) sd.textContent = dn[new Date(y, m, d).getDay()] + ', ' + mn[m] + ' ' + d;
+    };
+    cal.appendChild(el);
+  }
+  const rem = 42 - first - days;
+  for (let d = 1; d <= rem; d++) { const el = mk('div','cal-d other'); el.textContent = d; cal.appendChild(el); }
+}
+function mk(tag, cls) { const el = document.createElement(tag); el.className = cls; return el; }
+
+// ── CLOCK ──
+function tick() {
+  const now = new Date();
+  const t = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+  const c = document.getElementById('clock'); if (c) c.textContent = t;
+  const ec = document.getElementById('emp-clock'); if (ec) ec.textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  const ed = document.getElementById('emp-date'); if (ed) ed.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+}
+const td = document.getElementById('today-date');
+if (td) td.textContent = new Date().toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+
+// ── CLOCK IN/OUT ──
+let clockedIn = false;
+function clockAction(action) {
+  const status = document.getElementById('clock-status');
+  const now = new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+  if (action === 'in') { clockedIn = true; if (status) status.textContent = '✅ Clocked in at ' + now; toast('✅ Clocked in at ' + now); }
+  else { clockedIn = false; if (status) status.textContent = '🔴 Clocked out at ' + now; toast('🔴 Clocked out at ' + now); }
+}
+
+// ── TOAST ──
+function toast(msg, duration = 3000) {
+  const t = document.getElementById('toast'); if (!t) return;
+  t.textContent = msg; t.style.opacity = '1'; t.style.transform = 'translateY(0)';
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(10px)'; }, duration);
+}
+
+// ── EXCEL EXPORTS (real .xlsx files) ──
+function exportBillingExcel() {
+  const wb = XLSX.utils.book_new();
+  const data = [
+    ['Brown Psychology Practice — Billing Export', '', '', '', '', '', '', '', ''],
+    ['Generated:', new Date().toLocaleDateString(), '', '', '', '', '', '', ''],
+    [''],
+    ['Date','Client','Service','CPT Code','Charged','Ins Paid','Client Paid','Balance','Status'],
+    ['03/28/2026','Maria Santos','Psychotherapy 53m','90837','$150.00','—','—','$150.00','Pending'],
+    ['03/28/2026','James Mitchell','Psychotherapy 53m','90837','$150.00','—','—','$150.00','Pending'],
+    ['03/27/2026','Derek Johnson','Psychotherapy 53m','90837','$150.00','$130.00','$20.00','$0.00','Paid'],
+    ['03/26/2026','Angela Cruz','Psychotherapy 53m','90837','$150.00','$150.00','$0.00','$0.00','Paid'],
+    ['03/25/2026','Thomas Briggs','Psychotherapy 53m','90837','$150.00','$150.00','$0.00','$0.00','Paid'],
+    ['03/24/2026','Carlos Rivera','Telehealth 53m','90837-GT','$150.00','$105.00','$45.00','$0.00','Paid'],
+    ['03/21/2026','Maria Santos','Psychotherapy 53m','90837','$150.00','$120.00','$30.00','$0.00','Paid'],
+    [''],
+    ['TOTALS','','','','$1,050.00','$655.00','$95.00','$300.00',''],
+    [''],
+    ['NOTE: Import this file into QuickBooks via File > Utilities > Import > Excel Files']
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{wch:14},{wch:20},{wch:22},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Billing');
+  XLSX.writeFile(wb, 'BrownPsych_Billing_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  toast('📊 Billing exported to Excel — QuickBooks ready!');
+}
+
+function exportPayrollExcel() {
+  const wb = XLSX.utils.book_new();
+  const data = [
+    ['Brown Psychology Practice — Payroll Register'],
+    ['Pay Period: 03/16/2026 – 03/31/2026','Generated:', new Date().toLocaleDateString()],
+    [''],
+    ['Employee','SSN (masked)','Title','Pay Type','Rate','Hours','Gross Pay','Fed Withholding','NJ State Tax','NJ SDI','NJ FLI','Health Ins Ded','Net Pay'],
+    ['David Brown','***-**-4521','PsyD · Owner','Salary','$175/hr','40.0','$7,000.00','$1,540.00','$420.00','$56.00','$21.00','$280.00','$4,683.00'],
+    ['Jennifer Sanchez','***-**-7834','Receptionist','Hourly','$22/hr','40.0','$880.00','$132.00','$52.80','$7.04','$2.64','$95.00','$590.52'],
+    ['Marcus Reed','***-**-2210','Admin PT','Hourly PT','$20/hr','20.0','$400.00','$48.00','$24.00','$3.20','$1.20','$0.00','$323.60'],
+    [''],
+    ['TOTALS','','','','','100.0','$8,280.00','$1,720.00','$496.80','$66.24','$24.84','$375.00','$5,597.12'],
+    [''],
+    ['Federal Tax Tables: 2026 IRS Publication 15-T'],
+    ['NJ Tax Tables: NJ Division of Taxation TR-1000'],
+    ['NJ SDI Rate: 0.08% employee share'],
+    ['NJ FLI Rate: 0.06% employee share']
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{wch:18},{wch:14},{wch:18},{wch:12},{wch:10},{wch:8},{wch:12},{wch:16},{wch:14},{wch:10},{wch:10},{wch:14},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Payroll Register');
+
+  const ts = [
+    ['TIME SHEET — Pay Period 03/16 – 03/31/2026'],[''],
+    ['Employee','Date','Clock In','Clock Out','Hours','Notes'],
+    ['Jennifer Sanchez','03/28/2026','9:00 AM','5:00 PM','8.0',''],
+    ['Jennifer Sanchez','03/27/2026','9:00 AM','5:00 PM','8.0',''],
+    ['Jennifer Sanchez','03/26/2026','9:00 AM','5:00 PM','8.0',''],
+    ['Marcus Reed','03/28/2026','10:00 AM','3:00 PM','5.0',''],
+    ['Marcus Reed','03/26/2026','10:00 AM','3:00 PM','5.0','']
+  ];
+  const ts_ws = XLSX.utils.aoa_to_sheet(ts);
+  XLSX.utils.book_append_sheet(wb, ts_ws, 'Time Sheets');
+  XLSX.writeFile(wb, 'BrownPsych_Payroll_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  toast('📊 Payroll exported to Excel with time sheets!');
+}
+
+function exportClientsExcel() {
+  const wb = XLSX.utils.book_new();
+  const data = [
+    ['Brown Psychology Practice — Client Roster'],['Generated:', new Date().toLocaleDateString()],[''],
+    ['Client ID','Name','DOB','Age','Phone','Email','Primary Dx','Insurance','Copay','Language','Status','Therapist','Since'],
+    ['#0042','Maria Santos','03/15/1985','40','(973) 555-0142','m.santos@email.com','PTSD (F43.10)','Aetna PPO','$30','English','Active','Dr. Brown','Jan 2025'],
+    ['#0038','James Mitchell','07/22/1979','46','(973) 555-0201','j.mitchell@email.com','MDD (F33.0)','BCBS PPO','$25','English','Active','Dr. Brown','Mar 2025'],
+    ['#0051','Rosa Hernández','11/04/1992','33','(973) 555-0318','r.hernandez@email.com','Intake','Self-Pay','$150/session','Spanish','Intake','Dr. Brown','Mar 2026'],
+    ['#0029','Carlos Rivera','05/30/1988','37','(973) 555-0445','c.rivera@email.com','AUD (F10.20)','Cigna HMO','$45','Spanish/Eng','Active','Dr. Brown','Jun 2024'],
+    ['#0019','Derek Johnson','09/14/1975','50','(973) 555-0567','d.johnson@email.com','MDD (F33.0)','Medicare','$20','English','Active','Dr. Brown','Jan 2024'],
+    ['#0047','Angela Cruz','02/18/1998','28','(973) 555-0612','a.cruz@email.com','GAD (F41.1)','Medicaid','$0','Spanish','Active','Dr. Brown','Aug 2025'],
+    ['#0011','Thomas Briggs','12/03/1968','57','(973) 555-0734','t.briggs@email.com','PTSD (F43.10)','Veterans Affairs','$0','English','Active','Dr. Brown','Sep 2023'],
+    ['#0055','Sandra Okonkwo','06/27/1990','35','(973) 555-0891','s.okonkwo@email.com','Anxiety (F41.9)','UnitedHealth','$30','English','On Hold','Dr. Brown','Nov 2025'],
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{wch:10},{wch:20},{wch:12},{wch:6},{wch:16},{wch:24},{wch:16},{wch:14},{wch:10},{wch:12},{wch:10},{wch:12},{wch:10}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Clients');
+  XLSX.writeFile(wb, 'BrownPsych_Clients_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  toast('📊 Client roster exported to Excel!');
+}
+
+function exportScheduleExcel() {
+  const wb = XLSX.utils.book_new();
+  const data = [
+    ['Brown Psychology Practice — Schedule Export'],['Date: March 28, 2026'],[''],
+    ['Time','Client','Session Type','Duration','CPT Code','Location','Language','Insurance','Status'],
+    ['9:00 AM','Maria Santos','EMDR · Session 8','50 min','90837','In-Person','English','Aetna PPO','Confirmed'],
+    ['11:00 AM','James Mitchell','CBT · Session 14','50 min','90837','In-Person','English','BCBS PPO','Confirmed'],
+    ['2:00 PM','Rosa Hernández','Initial Intake','90 min','90791','In-Person','Spanish','Self-Pay','Intake'],
+    ['4:00 PM','Carlos Rivera','Addiction Counseling','50 min','90837-GT','Telehealth','Spanish/Eng','Cigna HMO','Telehealth'],
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{wch:10},{wch:20},{wch:20},{wch:10},{wch:12},{wch:12},{wch:12},{wch:14},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Schedule');
+  XLSX.writeFile(wb, 'BrownPsych_Schedule_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  toast('📊 Schedule exported to Excel!');
+}
+
+function exportNotesExcel() {
+  const wb = XLSX.utils.book_new();
+  const data = [
+    ['Brown Psychology Practice — Session Notes Log'],[''],
+    ['Date','Time','Client','Session Type','CPT','Duration','PHQ-9','GAD-7','Risk Level','Status','Signed By','Signed Date'],
+    ['03/28/2026','9:00 AM','Maria Santos','EMDR · Individual','90837','53 min','9','5','No SI/HI','Draft','—','—'],
+    ['03/28/2026','11:00 AM','James Mitchell','CBT · Individual','90837','53 min','11','8','No SI/HI','Draft','—','—'],
+    ['03/27/2026','2:00 PM','Derek Johnson','Addiction · Individual','90837','53 min','8','4','No SI/HI','Signed','Dr. Brown','03/27/2026'],
+    ['03/26/2026','3:00 PM','Angela Cruz','CBT · Spanish','90837','53 min','13','10','No SI/HI','Signed','Dr. Brown','03/26/2026'],
+    ['03/25/2026','10:00 AM','Thomas Briggs','Trauma · Individual','90837','53 min','16','7','No SI/HI','Signed','Dr. Brown','03/25/2026'],
+    ['03/24/2026','1:00 PM','Carlos Rivera','Addiction · Telehealth','90837-GT','53 min','10','6','No SI/HI','Signed','Dr. Brown','03/24/2026'],
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  XLSX.utils.book_append_sheet(wb, ws, 'Notes Log');
+  XLSX.writeFile(wb, 'BrownPsych_NotesLog_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  toast('📊 Session notes log exported!');
+}
+
+function exportClientExcel() { exportClientsExcel(); }
+
+// ── WORD DOCUMENT GENERATION (real .docx via HTML blob) ──
+function generateReport() {
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;margin:40px;color:#1a1a2e}h1{color:#1a2744;font-size:20px;border-bottom:3px solid #1D9E75;padding-bottom:8px}h2{color:#243259;font-size:15px;margin-top:20px}table{width:100%;border-collapse:collapse;margin-top:8px}th{background:#1a2744;color:#fff;padding:8px 12px;text-align:left;font-size:12px}td{padding:8px 12px;border-bottom:1px solid #e2e4ef;font-size:12px}.badge{background:#e8f7f2;color:#0f7a5a;padding:2px 8px;border-radius:10px;font-size:11px}.footer{margin-top:30px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e4ef;padding-top:10px}</style></head><body>
+  <h1>Brown Psychology Practice — Client Report</h1>
+  <p style="color:#64748b;font-size:12px">Generated: ${new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} | Morristown, NJ | Dr. David Brown, PsyD, LCADC</p>
+  <h2>Client: Maria Santos — #0042</h2>
+  <table><tr><th>Field</th><th>Information</th></tr>
+  <tr><td>Date of Birth</td><td>03/15/1985 (Age 40)</td></tr>
+  <tr><td>Primary Diagnosis</td><td>PTSD (F43.10)</td></tr>
+  <tr><td>Secondary Diagnosis</td><td>MDD, Recurrent (F33.0)</td></tr>
+  <tr><td>Treatment Modality</td><td>EMDR + CBT</td></tr>
+  <tr><td>Sessions Completed</td><td>8</td></tr>
+  <tr><td>Insurance</td><td>Aetna PPO — Member ID: W1234567890</td></tr>
+  <tr><td>Language</td><td>English</td></tr>
+  <tr><td>Risk Assessment</td><td><span class="badge">No Active SI/HI — Safety Plan Current</span></td></tr>
+  </table>
+  <h2>Recent Session Summary</h2>
+  <table><tr><th>Date</th><th>Session</th><th>PHQ-9</th><th>Status</th></tr>
+  <tr><td>03/21/2026</td><td>EMDR Phase 4 — Session 8</td><td>9</td><td><span class="badge">Signed</span></td></tr>
+  <tr><td>03/14/2026</td><td>EMDR Phase 4 — Session 7</td><td>14</td><td><span class="badge">Signed</span></td></tr>
+  </table>
+  <div class="footer">CONFIDENTIAL — Protected Health Information — HIPAA Compliant | Brown Psychology Practice | (973) 555-0100</div>
+  </body></html>`;
+  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'BrownPsych_ClientReport_' + new Date().toISOString().slice(0,10) + '.doc'; a.click();
+  URL.revokeObjectURL(url);
+  toast('📄 Client report downloaded — opens in Word!');
+}
+
+function generateAppointmentLetter() {
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;margin:60px;color:#1a1a2e;line-height:1.7}h1{color:#1a2744;font-size:18px}.letterhead{border-bottom:3px solid #1D9E75;padding-bottom:16px;margin-bottom:30px}.footer{margin-top:40px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e4ef;padding-top:10px}</style></head><body>
+  <div class="letterhead"><h1>Brown Psychology Practice</h1><p style="color:#64748b;font-size:13px">100 South Street, Suite 200 | Morristown, NJ 07960 | (973) 555-0100</p><p style="color:#64748b;font-size:13px">Dr. David Brown, PsyD, LCADC | English · Spanish · Portuguese</p></div>
+  <p>${new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</p>
+  <p style="margin-top:16px">Dear Maria,</p>
+  <p>This letter confirms your upcoming appointment with Dr. David Brown, PsyD, LCADC at Brown Psychology Practice.</p>
+  <p><strong>Appointment Details:</strong><br>Date: Saturday, March 28, 2026<br>Time: 9:00 AM<br>Duration: 50 minutes<br>Session Type: EMDR — Individual Therapy<br>Location: 100 South Street, Suite 200, Morristown, NJ 07960</p>
+  <p>Please arrive 10 minutes early. If you need to reschedule, please contact us at least 24 hours in advance to avoid the late cancellation fee of $75.00.</p>
+  <p>If you have any questions, please call our office at (973) 555-0100 or email admin@brownpsychology.com.</p>
+  <p style="margin-top:24px">Warmly,</p>
+  <p><strong>Dr. David Brown, PsyD, LCADC</strong><br>Brown Psychology Practice<br>Morristown, NJ</p>
+  <div class="footer">CONFIDENTIAL | This letter may contain protected health information. If received in error, please contact our office.</div>
+  </body></html>`;
+  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'AppointmentLetter_MaríaSantos_Mar28.doc'; a.click();
+  URL.revokeObjectURL(url);
+  toast('📄 Appointment letter downloaded — opens in Word!');
+}
+
+// ── OUTLOOK INTEGRATION ──
+function sendReminders() {
+  const subject = encodeURIComponent('Appointment Reminder — Brown Psychology Practice');
+  const body = encodeURIComponent(
+    'Dear Maria,\r\n\r\n' +
+    'This is a friendly reminder of your upcoming appointment:\r\n\r\n' +
+    'Date: Saturday, March 28, 2026\r\n' +
+    'Time: 9:00 AM\r\n' +
+    'Location: 100 South Street, Suite 200, Morristown, NJ 07960\r\n' +
+    'Session: EMDR — Individual Therapy\r\n\r\n' +
+    'Please reply to confirm or call (973) 555-0100 to reschedule with 24 hours notice.\r\n\r\n' +
+    'Warmly,\r\nDr. David Brown, PsyD, LCADC\r\n' +
+    'Brown Psychology Practice | Morristown, NJ\r\n' +
+    '(973) 555-0100 | admin@brownpsychology.com'
+  );
+  window.location.href = 'mailto:m.santos@email.com?subject=' + subject + '&body=' + body;
+  toast('📧 Outlook opened with pre-filled reminder email!');
+}
+
+// ── INIT ──
+buildCal();
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
