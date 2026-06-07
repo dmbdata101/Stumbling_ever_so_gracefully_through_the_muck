@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Groove Addict Music — Instruments. Lessons. Loud.</title>
+
+<!-- ============================================================
+     SEO & social sharing
+     ============================================================ -->
+<meta name="description" content="Independent music shop in Milledgeville, GA. Instruments, gear, lessons, and repairs. Run by musicians, for musicians." />
+<meta name="author" content="Groove Addict Music" />
+<meta name="theme-color" content="#ff4422" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Groove Addict Music — Milledgeville, GA" />
+<meta property="og:description" content="Independent music shop. Instruments, gear, lessons, repairs. Loud since 2020." />
+<meta property="og:url" content="" />
+<meta property="og:site_name" content="Groove Addict Music" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Groove Addict Music" />
+<meta name="twitter:description" content="Independent music shop. Instruments, gear, lessons, repairs. Loud since 2020." />
+
+<!-- Inline SVG favicon — red square with music note -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23ff4422'/%3E%3Ctext x='50%25' y='58%25' font-family='serif' font-size='40' fill='white' text-anchor='middle' dominant-baseline='middle'%3E%E2%99%AB%3C/text%3E%3C/svg%3E" />
+
+<!-- Stylesheet -->
+<link rel="stylesheet" href="music_store.css" />
+</head>
+
+<body>
+
+<!-- ======= NAV ======= -->
+<nav class="topbar">
+  <div class="container nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">&#9835;</span>
+      <span>Groove Addict Music</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#shop">Shop</a>
+      <a href="#lessons">Lessons</a>
+      <a href="#contact">Contact</a>
+      <button class="cart-btn" id="cartOpenBtn" aria-label="Cart">
+        Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ======= HERO ======= -->
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <span class="tag">Independent &middot; Since 2020</span>
+      <h1>
+        Real gear.<br />
+        Real teachers.<br />
+        <span class="strike">Real loud.</span>
+      </h1>
+      <p class="lead">Groove Addict Music is the music shop your scene deserves. Hand-picked instruments, honest advice, lessons that don't suck, and a tech bench that treats your guitar like it's their own.</p>
+      <div class="hero-ctas">
+        <button data-scroll-to="shop">Shop the floor</button>
+        <button class="outline" data-scroll-to="lessons">Book a lesson</button>
+      </div>
+    </div>
+    <div class="hero-photo" role="img" aria-label="Music store interior with vintage gear"></div>
+  </div>
+</section>
+
+<!-- ======= MARQUEE STRIP ======= -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>New arrivals weekly</span>
+    <span>Free setup with new guitars</span>
+    <span>Trade-ins welcome</span>
+    <span>Walk-in repairs</span>
+    <span>Open mic every Thursday</span>
+    <span>New arrivals weekly</span>
+    <span>Free setup with new guitars</span>
+    <span>Trade-ins welcome</span>
+    <span>Walk-in repairs</span>
+    <span>Open mic every Thursday</span>
+  </div>
+</div>
+
+<!-- ======= ABOUT ======= -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-photo" role="img" aria-label="Inside the shop"></div>
+      <div class="about-text">
+        <span class="tag">Our Story</span>
+        <h2>Built by musicians.<br />Run by musicians.<br />For musicians.</h2>
+        <p>Owner <strong>Ronnie Pitman</strong> opened Groove Addict Music in 2020 because the box-store experience was killing the magic. <strong>No commission-chasing sales reps. No pushing the most expensive option.</strong> Just real players helping real players find the right gear.</p>
+        <p>Beginners get the same respect as pros around here. We'll set up your kid's first $99 starter guitar with the same care we put into a vintage Gibson on consignment. That's the deal.</p>
+        <div class="stats">
+          <div class="stat"><span class="num">5+</span><span class="lbl">Years in the game</span></div>
+          <div class="stat"><span class="num">[#]K+</span><span class="lbl">Instruments sold</span></div>
+          <div class="stat"><span class="num">[#]+</span><span class="lbl">Active students</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= SHOP ======= -->
+<section class="alt" id="shop">
+  <div class="container">
+    <div class="section-head center">
+      <span class="tag">The Floor</span>
+      <h2>Gear we'd buy ourselves.</h2>
+      <p>A rotating selection of new and used instruments, amps, and gear. Online or in-store &mdash; try before you buy is always on the table.</p>
+    </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="guitars">Guitars</button>
+      <button data-filter="keys">Keys</button>
+      <button data-filter="drums">Drums</button>
+      <button data-filter="amps">Amps & FX</button>
+      <button data-filter="accessories">Accessories</button>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+</section>
+
+<!-- ======= LESSONS ======= -->
+<section id="lessons">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">Lessons</span>
+      <h2>Learn from people who actually gig.</h2>
+      <p>Patient, no-judgment instructors who play out, write songs, and remember what it was like to suck. All ages. All levels.</p>
+    </div>
+    <div class="lessons-grid">
+      <div class="lesson-cards">
+        <div class="lesson-card">
+          <h3>Guitar &mdash; Acoustic / Electric / Bass</h3>
+          <p>From open chords to soloing. Rock, blues, metal, jazz, country &mdash; whatever your thing is.</p>
+          <div class="price">$[XX] / 30 MIN &nbsp;&middot;&nbsp; $[XX] / 60 MIN</div>
+        </div>
+        <div class="lesson-card">
+          <h3>Piano &amp; Keys</h3>
+          <p>Classical fundamentals, contemporary styles, theory, songwriting. We meet you where you are.</p>
+          <div class="price">$[XX] / 30 MIN &nbsp;&middot;&nbsp; $[XX] / 60 MIN</div>
+        </div>
+        <div class="lesson-card">
+          <h3>Drums &amp; Percussion</h3>
+          <p>Soundproofed kit room. Build pocket, chops, and stamina. Sticks provided. Earplugs encouraged.</p>
+          <div class="price">$[XX] / 30 MIN &nbsp;&middot;&nbsp; $[XX] / 60 MIN</div>
+        </div>
+        <div class="lesson-card">
+          <h3>Voice &amp; Songwriting</h3>
+          <p>Find your voice. Build stage confidence. Write songs that don't embarrass you in five years.</p>
+          <div class="price">$[XX] / 30 MIN &nbsp;&middot;&nbsp; $[XX] / 60 MIN</div>
+        </div>
+      </div>
+      <form class="booking-form" id="bookingForm">
+        <h3>Request a lesson</h3>
+        <div class="form-group">
+          <label for="bookName">Student name</label>
+          <input type="text" id="bookName" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bookEmail">Email</label>
+            <input type="email" id="bookEmail" required />
+          </div>
+          <div class="form-group">
+            <label for="bookPhone">Phone</label>
+            <input type="tel" id="bookPhone" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bookInstrument">Instrument</label>
+            <select id="bookInstrument" required>
+              <option value="">Pick one...</option>
+              <option>Guitar</option>
+              <option>Bass</option>
+              <option>Piano / Keyboard</option>
+              <option>Drums</option>
+              <option>Voice</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bookLevel">Level</label>
+            <select id="bookLevel" required>
+              <option value="">Pick one...</option>
+              <option>Total beginner</option>
+              <option>Some experience</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="bookNotes">Anything we should know?</label>
+          <textarea id="bookNotes" placeholder="Goals, schedule, kid's age, bands you love, etc."></textarea>
+        </div>
+        <button type="submit" style="width:100%;">Send it</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ======= CONTACT ======= -->
+<section class="alt" id="contact">
+  <div class="container">
+    <div class="section-head center">
+      <span class="tag">Get In Touch</span>
+      <h2>Stop by. Call. Holler.</h2>
+      <p>Special order? Repair quote? Want to consign that bass collecting dust in your closet? Let's talk.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>The Shop</h3>
+        <div class="info-row">
+          <div class="icon">&#9742;</div>
+          <div>
+            <div class="label">Phone</div>
+            <a href="tel:(615) 364-2005">(615) 364-2005</a>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="icon">&#9993;</div>
+          <div>
+            <div class="label">Email</div>
+            <a href="mailto:[EMAIL]">[EMAIL]</a>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="icon">&#127968;</div>
+          <div>
+            <div class="label">Address</div>
+            <div>119 N. Wayne St., Suite A<br />Milledgeville, GA 30220</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="icon">&#128337;</div>
+          <div>
+            <div class="label">Hours</div>
+            <div>
+              Mon&ndash;Fri &nbsp; [HOURS_WEEKDAY]<br />
+              Saturday &nbsp;&nbsp;&nbsp; [HOURS_SAT]<br />
+              Sunday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [HOURS_SUN]
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="booking-form" id="contactForm">
+        <h3>Send us a message</h3>
+        <div class="form-group">
+          <label for="contactName">Your name</label>
+          <input type="text" id="contactName" required />
+        </div>
+        <div class="form-group">
+          <label for="contactEmail">Email</label>
+          <input type="email" id="contactEmail" required />
+        </div>
+        <div class="form-group">
+          <label for="contactSubject">What's this about?</label>
+          <select id="contactSubject" required>
+            <option value="">Pick one...</option>
+            <option>General question</option>
+            <option>Special order / can you stock this?</option>
+            <option>Repair / setup quote</option>
+            <option>Trade-in or consignment</option>
+            <option>Lessons inquiry</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contactMsg">Message</label>
+          <textarea id="contactMsg" required></textarea>
+        </div>
+        <button type="submit" style="width:100%;">Send</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ======= FOOTER ======= -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="color: var(--ink); margin-bottom: 14px;">
+          <span class="brand-mark">&#9835;</span>
+          <span>Groove Addict Music</span>
+        </div>
+        <p style="color: var(--ink-dim); font-size: 0.9rem; max-width: 320px; line-height: 1.7;">Independent music shop in Milledgeville, GA. Instruments, lessons, repairs. Loud since 2020.</p>
+        <div class="socials">
+          <a href="https://www.facebook.com/groove.addicts.7/" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#shop">Guitars</a></li>
+          <li><a href="#shop">Keys</a></li>
+          <li><a href="#shop">Drums</a></li>
+          <li><a href="#shop">Amps &amp; FX</a></li>
+          <li><a href="#shop">Accessories</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="#lessons">Lessons</a></li>
+          <li><a href="#lessons">Workshops</a></li>
+          <li><a href="#lessons">Summer Camps</a></li>
+          <li><a href="#lessons">Open Mic</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li><a href="tel:(615) 364-2005">(615) 364-2005</a></li>
+          <li><a href="mailto:[EMAIL]">[EMAIL]</a></li>
+          <li>119 N. Wayne St., Suite A</li>
+          <li>Milledgeville, GA 30220</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; <span id="year"></span> Groove Addict Music &nbsp;&middot;&nbsp; All rights reserved &nbsp;&middot;&nbsp; Built loud
+    </div>
+  </div>
+</footer>
+
+<!-- ======= CART MODAL ======= -->
+<div class="modal-overlay" id="cartModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Your Cart</h3>
+      <button class="modal-close" id="cartCloseBtn" aria-label="Close">&times;</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotalRow" style="display:none;">
+      <span>Total</span>
+      <span id="cartTotal">$0.00</span>
+    </div>
+    <button id="checkoutBtn" style="width:100%; margin-top:14px; display:none;">Checkout</button>
+  </div>
+</div>
+
+<!-- ======= TOAST ======= -->
+<div class="toast" id="toast">Added to cart</div>
+
+<script src="music_store.js"></script>
+</body>
+</html>
