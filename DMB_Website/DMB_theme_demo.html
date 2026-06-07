@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Theme Demo — D. Michael Brown</title>
+
+<meta name="description" content="Live theme switcher demonstrating the design-token system." />
+<meta name="theme-color" content="#3b5267" />
+
+<!-- Same favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%233b5267'/%3E%3Ctext x='50%25' y='54%25' font-family='Georgia,serif' font-size='34' font-weight='600' fill='%23faf7f2' text-anchor='middle' dominant-baseline='middle'%3EM%3C/text%3E%3C/svg%3E" />
+
+<!-- Same fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sacramento&display=swap" rel="stylesheet" />
+
+<!-- The same site styles — unchanged -->
+<link rel="stylesheet" href="DMB_web.css" />
+
+<!-- ============================================================
+     THEME OVERRIDES — each theme overrides only the tokens
+     it cares about. The rest of styles.css doesn't change.
+     This is the design-system idea: change the tokens, the
+     whole site reflows automatically.
+     ============================================================ -->
+<style>
+  /* --- BURGUNDY: scholarly / distinguished --- */
+  html[data-theme="burgundy"] {
+    --accent:       #6b2737;
+    --accent-dark:  #4a1a26;
+    --accent-warm:  #b8945f;
+    --bg-alt:       #f5e9e3;
+  }
+
+  /* --- FOREST: grounded / natural --- */
+  html[data-theme="forest"] {
+    --accent:       #2c4a3a;
+    --accent-dark:  #1f3528;
+    --accent-warm:  #b8945f;
+    --bg:           #f7f4ee;
+    --bg-alt:       #ebe8e0;
+  }
+
+  /* --- SUNSET: warm / optimistic --- */
+  html[data-theme="sunset"] {
+    --accent:       #c14d2c;
+    --accent-dark:  #8a3318;
+    --accent-warm:  #d4a85a;
+    --bg-alt:       #f4e9d8;
+  }
+
+  /* --- TWILIGHT: full dark mode --- */
+  html[data-theme="twilight"] {
+    --bg:           #1a1d24;
+    --bg-alt:       #232733;
+    --bg-card:      #2a2f3a;
+    --ink:          #f0ebe1;
+    --ink-muted:    #b8b3a8;
+    --ink-light:    #888379;
+    --accent:       #6e8aa8;
+    --accent-dark:  #4a6580;
+    --accent-warm:  #d4a85a;
+    --border:       #3a3e4a;
+    --border-light: #2d313c;
+  }
+  /* Tweak hero overlay slightly in dark mode for legibility */
+  html[data-theme="twilight"] .hero {
+    background-image:
+      linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(15, 18, 25, 0.78) 100%),
+      url('office_bg.png');
+  }
+
+  /* ============================================================
+     FLOATING THEME SWITCHER
+     ============================================================ */
+  .theme-switcher {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-lg);
+    z-index: 150;
+    font-family: var(--font-sans);
+    max-width: 240px;
+  }
+  .theme-switcher h4 {
+    font-family: var(--font-serif);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  .theme-switcher .theme-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .theme-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background: transparent;
+    border: 1px solid var(--border-light);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--ink);
+    transition: border-color 0.15s ease, background 0.15s ease;
+    text-align: left;
+  }
+  .theme-btn:hover { border-color: var(--ink-muted); }
+  .theme-btn.active {
+    border-color: var(--accent);
+    background: var(--bg-alt);
+    font-weight: 600;
+  }
+  .theme-swatch {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+  .theme-switcher .hint {
+    font-size: 11px;
+    color: var(--ink-light);
+    font-style: italic;
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+  @media (max-width: 600px) {
+    .theme-switcher {
+      bottom: 12px; right: 12px;
+      max-width: 200px;
+      padding: 10px 12px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <nav aria-label="Primary">
+    <div class="brand">D. Michael Brown</div>
+    <ul class="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#photos">Photos</a></li>
+      <li><a href="#videos">Videos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="hero" id="home">
+  <h1>D. Michael Brown</h1>
+  <p class="subtitle">Journey to PhD</p>
+  <p class="tagline">From forty-three years of working life to clinical psychology. The climb is the point. The destination is bilingual psycho-oncology in Short Hills, New Jersey.</p>
+  <p class="meta">Newton, NJ &rarr; Short Hills, NJ &middot; One mile at a time.</p>
+</div>
+
+<section id="about" class="about">
+  <h2>The Journey</h2>
+  <p class="section-subtitle">From forty-three years of working life to clinical psychology &mdash; the chapters along the way.</p>
+  <div class="about-content">
+
+    <h3 data-chapter="Chapter One">Where the road is right now</h3>
+    <p>I am a pre-doctoral psychology student preparing for clinical psychology doctoral applications in the December 2026 cycle. My focus is psycho-oncology &mdash; the psychological experience of cancer patients, survivors, and caregivers &mdash; building toward a bilingual practice (English, Spanish, Portuguese) in Short Hills, New Jersey under The Elysian Group.</p>
+
+    <p>Currently enrolled at Thomas Edison State University (TESU), accepted April 21, 2026 with ninety-plus credits transferred from Sophia Learning and CLEP.</p>
+
+    <div class="chapter-divider">&middot;  &middot;  &middot;</div>
+
+    <h3 data-chapter="Chapter Two">The miles already walked</h3>
+    <p>Thirty-three years inside corporate audiovisual and IT systems integration. Across fifty-plus deployments, the recurring lesson was that outcomes were determined by leadership, change management, and how organizations integrated new tools &mdash; not by the technology itself.</p>
+
+    <div class="chapter-divider">&middot;  &middot;  &middot;</div>
+
+    <h3 data-chapter="Chapter Three">Music &mdash; the road that has run alongside</h3>
+    <p>I have been a working musician for more than forty years. Self-taught piano from age twelve. Atlanta club circuit, regional touring, studio session work. Still playing. Still recording.</p>
+
+    <p class="italic">"The mountain is named. The route is mapped."</p>
+  </div>
+</section>
+
+<section id="photos" class="photos">
+  <h2>Photos</h2>
+  <p class="section-subtitle">Milestones, study spaces, moments along the climb.</p>
+  <div class="photos-grid" id="photosGrid">
+    <p class="photos-empty">Photos coming soon as the journey unfolds.</p>
+  </div>
+</section>
+
+<section id="videos" class="videos">
+  <h2>Videos</h2>
+  <p class="section-subtitle">Talks, music, milestones &mdash; pieces of the journey on screen.</p>
+  <div class="videos-grid">
+    <p class="videos-empty">Videos coming soon as the journey unfolds.</p>
+  </div>
+</section>
+
+<section id="contact" class="contact-section">
+  <h2>Connect</h2>
+  <p class="section-subtitle">Walk along on the journey.</p>
+
+  <p class="invitation">Please follow along on social &mdash; and if you'd like to reach out directly, the door is open.</p>
+
+  <div class="direct-contact">
+    <h3>Direct</h3>
+    <p class="email-line"><a href="mailto:psycd007@gmail.com">psycd007@gmail.com</a></p>
+    <p class="phone-line"><a href="tel:+19734040080">(973) 404-0080</a></p>
+  </div>
+
+  <div class="signup-card">
+    <h3>Join the journey</h3>
+    <p class="signup-blurb">Occasional updates from the road &mdash; milestones, study reflections, the climb from GED to PhD. No spam, ever.</p>
+    <p class="signup-tiny">(Demo page &mdash; signup form lives on the real index.html.)</p>
+  </div>
+</section>
+
+<footer>
+  <p class="meta">D. Michael Brown &middot; The Elysian Group, Short Hills NJ &middot; 2026</p>
+</footer>
+
+<!-- ============================================================
+     THEME SWITCHER UI
+     ============================================================ -->
+<aside class="theme-switcher" aria-label="Theme switcher">
+  <h4>Theme</h4>
+  <div class="theme-options" id="themeOptions">
+    <button class="theme-btn active" data-theme="slate">
+      <span class="theme-swatch" style="background:#3b5267;"></span> Slate
+    </button>
+    <button class="theme-btn" data-theme="burgundy">
+      <span class="theme-swatch" style="background:#6b2737;"></span> Burgundy
+    </button>
+    <button class="theme-btn" data-theme="forest">
+      <span class="theme-swatch" style="background:#2c4a3a;"></span> Forest
+    </button>
+    <button class="theme-btn" data-theme="sunset">
+      <span class="theme-swatch" style="background:#c14d2c;"></span> Sunset
+    </button>
+    <button class="theme-btn" data-theme="twilight" style="grid-column: span 2;">
+      <span class="theme-swatch" style="background:#6e8aa8;"></span> Twilight (Dark)
+    </button>
+  </div>
+  <p class="hint">Click a theme &mdash; the whole site flips. Same HTML, same CSS, just different tokens.</p>
+</aside>
+
+<script>
+  // Active nav highlight
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sectionEls = ['home', 'about', 'photos', 'videos', 'contact']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  function updateActiveNav() {
+    const scrollPos = window.scrollY + 80;
+    let current = 'home';
+    sectionEls.forEach(sec => {
+      if (sec.offsetTop <= scrollPos) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+  // Theme switcher — click a button, set data-theme on <html>
+  const themeOptions = document.getElementById('themeOptions');
+  themeOptions.addEventListener('click', e => {
+    const btn = e.target.closest('.theme-btn');
+    if (!btn) return;
+    const theme = btn.dataset.theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    themeOptions.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b === btn));
+  });
+</script>
+
+</body>
+</html>

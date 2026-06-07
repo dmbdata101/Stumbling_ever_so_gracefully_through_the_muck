@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D. Michael Brown</title>
+<style>
+  /* ============================================================
+     Neutral palette — beige/gray/black/slate-blue, no purples
+     ============================================================ */
+  :root {
+    --bg: #faf7f2;           /* warm off-white */
+    --bg-alt: #f1ece4;       /* slightly darker beige */
+    --bg-card: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #5a5a5a;
+    --text-light: #8a8a8a;
+    --accent: #3b5267;       /* slate blue */
+    --accent-dark: #2a3b4a;
+    --border: #d8d2c5;
+    --border-light: #e8e2d5;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* ============================================================
+     Header — sticky nav
+     ============================================================ */
+  header {
+    position: sticky;
+    top: 0;
+    background: var(--accent-dark);
+    color: var(--bg);
+    padding: 14px 32px;
+    z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  header .brand {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  header .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  header .nav-links a {
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    padding: 6px 0;
+  }
+  header .nav-links a:hover {
+    opacity: 1;
+  }
+  header .nav-links a.active {
+    opacity: 1;
+    border-bottom: 2px solid var(--bg);
+  }
+
+  /* ============================================================
+     Home / Hero — office image background with dark overlay
+     ============================================================ */
+  .hero {
+    position: relative;
+    background-image:
+      linear-gradient(135deg, rgba(20, 25, 35, 0.72) 0%, rgba(35, 40, 50, 0.65) 100%),
+      url('office_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 140px 32px 120px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-light);
+    color: #f5efe2;
+  }
+  .hero h1 {
+    font-family: "Lucida Handwriting", "Lucida Calligraphy", "Apple Chancery", cursive;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: #f5efe2;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+    line-height: 1.2;
+  }
+  .hero .subtitle {
+    font-family: "Lucida Handwriting", "Apple Chancery", cursive;
+    font-size: 24px;
+    color: #c8b48f;
+    margin-bottom: 28px;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    font-style: italic;
+  }
+  .hero .tagline {
+    font-size: 20px;
+    color: #e8dfd0;
+    max-width: 720px;
+    margin: 0 auto 28px;
+    line-height: 1.55;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  }
+  .hero .meta {
+    font-size: 14px;
+    color: #c8b48f;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+  }
+
+  /* ============================================================
+     Sections
+     ============================================================ */
+  section {
+    padding: 80px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  section h2 {
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+  }
+  section .section-subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-bottom: 36px;
+  }
+
+  /* ============================================================
+     About — horizontal vignette: darker cream sides → light center
+     ============================================================ */
+  .about {
+    background: linear-gradient(
+      90deg,
+      #b8ad95 0%,
+      #b8ad95 8%,
+      #c2b89e 16%,
+      #cdc2a6 24%,
+      #d6ccae 32%,
+      #ded5b9 40%,
+      #e6dcc4 50%,
+      #ded5b9 60%,
+      #d6ccae 68%,
+      #cdc2a6 76%,
+      #c2b89e 84%,
+      #b8ad95 92%,
+      #b8ad95 100%
+    );
+    position: relative;
+  }
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-left: 1px solid var(--border);
+    padding-left: 36px;
+  }
+  .about-content p {
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .about-content p.italic {
+    font-style: italic;
+    color: var(--text-muted);
+    border-left: 3px solid var(--border);
+    padding-left: 18px;
+    font-size: 17px;
+  }
+  .about-content h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 18px;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .about-content h3::before {
+    content: attr(data-chapter);
+    display: block;
+    font-family: "Lucida Handwriting", "Apple Chancery", cursive;
+    font-size: 26px;
+    font-weight: 400;
+    color: #000;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    opacity: 1;
+  }
+  .chapter-divider {
+    text-align: center;
+    margin: 36px 0 18px 0;
+    color: var(--accent);
+    opacity: 0.4;
+    font-size: 18px;
+    letter-spacing: 8px;
+  }
+  .chapter-divider::before, .chapter-divider::after {
+    content: "";
+    display: inline-block;
+    width: 60px;
+    height: 1px;
+    background: var(--border);
+    vertical-align: middle;
+    margin: 0 14px;
+  }
+
+  /* ============================================================
+     Photos
+     ============================================================ */
+  .photos {
+    background: var(--bg-alt);
+  }
+  .photo-input {
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 28px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .photo-input label {
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-right: 6px;
+  }
+  .photo-input input[type="file"] {
+    flex: 1;
+    padding: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    min-width: 240px;
+  }
+  .photo-input input[type="text"] {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    min-width: 200px;
+  }
+  .photo-input input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .photo-input button {
+    padding: 12px 22px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .photo-input button:hover {
+    background: var(--accent-dark);
+  }
+  .photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .photo-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .photo-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+  .photo-card .photo-meta {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .photo-card .caption {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .photo-card .photo-actions button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .photo-card .photo-actions button:hover {
+    background: var(--bg-alt);
+  }
+  .photos-empty {
+    color: var(--text-light);
+    text-align: center;
+    padding: 40px 0;
+    font-style: italic;
+    grid-column: 1 / -1;
+  }
+  .photo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 32px;
+  }
+  .photo-modal.active { display: flex; }
+  .photo-modal img {
+    max-width: 95%;
+    max-height: 90vh;
+    object-fit: contain;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  .photo-modal .close-modal {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  /* ============================================================
+     Videos
+     ============================================================ */
+  .videos {
+    background: var(--bg);
+  }
+  .video-input {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    max-width: 700px;
+  }
+  .video-input input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+  }
+  .video-input input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .video-input button {
+    padding: 12px 22px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .video-input button:hover {
+    background: var(--accent-dark);
+  }
+  .videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 16px;
+  }
+  .video-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .video-card iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: 0;
+  }
+  .video-card .video-meta {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .video-card .video-meta span {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .video-card .video-meta button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .video-card .video-meta button:hover {
+    background: var(--bg-alt);
+  }
+  .videos-empty {
+    color: var(--text-light);
+    text-align: center;
+    padding: 40px 0;
+    font-style: italic;
+  }
+
+  /* ============================================================
+     Contact section
+     ============================================================ */
+  .contact-section {
+    background: var(--bg-alt);
+  }
+  .contact-section .invitation {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 36px;
+    color: var(--text-muted);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto 36px;
+  }
+  .social-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 26px 24px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--shadow);
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .social-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+  .social-card .icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .social-card .icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  .social-card.linkedin .icon { color: #0A66C2; }
+  .social-card.instagram .icon { color: #E1306C; }
+  .social-card.facebook .icon { color: #1877F2; }
+  .social-card .platform {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+  }
+  .social-card .handle {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .direct-contact {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 24px;
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .direct-contact h3 {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .direct-contact a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .direct-contact a:hover {
+    text-decoration: underline;
+  }
+  .direct-contact .email-line {
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+  .direct-contact .phone-line {
+    color: var(--text);
+    font-size: 15px;
+    letter-spacing: 0.2px;
+  }
+  .direct-contact .phone-line .sep {
+    color: var(--text-light);
+    margin: 0 8px;
+  }
+  /* Email signup */
+  .signup-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 28px 24px;
+    max-width: 640px;
+    margin: 24px auto 0;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .signup-card h3 {
+    font-family: "Lucida Handwriting", "Apple Chancery", cursive;
+    font-size: 26px;
+    color: #000;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .signup-card .signup-blurb {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    line-height: 1.55;
+  }
+  .signup-form {
+    display: flex;
+    gap: 8px;
+    max-width: 480px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .signup-form input[type="email"] {
+    flex: 1;
+    min-width: 220px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+  }
+  .signup-form input[type="email"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .signup-form button {
+    padding: 12px 24px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .signup-form button:hover {
+    background: var(--accent-dark);
+  }
+  .signup-form .hp {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+  }
+  .signup-success {
+    display: none;
+    color: var(--text);
+    font-size: 16px;
+    padding: 16px;
+    background: var(--bg-alt);
+    border-radius: 4px;
+    margin-top: 12px;
+  }
+  .signup-success.active {
+    display: block;
+  }
+  .signup-tiny {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* ============================================================
+     Footer (minimal)
+     ============================================================ */
+  footer {
+    background: var(--accent-dark);
+    color: #f5efe2;
+    padding: 32px 32px 28px;
+    text-align: center;
+  }
+  footer .meta {
+    font-size: 13px;
+    color: #f5efe2;
+    opacity: 0.85;
+    letter-spacing: 0.3px;
+  }
+
+  /* ============================================================
+     Mobile
+     ============================================================ */
+  @media (max-width: 768px) {
+    header { padding: 12px 16px; }
+    header .nav-links { gap: 16px; }
+    header .nav-links a { font-size: 13px; }
+    .hero { padding: 70px 20px 60px; }
+    .hero h1 { font-size: 36px; }
+    .hero .tagline { font-size: 17px; }
+    section { padding: 56px 20px; }
+    section h2 { font-size: 24px; }
+    .photos-grid, .videos-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand">D. Michael Brown</div>
+    <ul class="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#photos">Photos</a></li>
+      <li><a href="#videos">Videos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="hero" id="home">
+  <h1>D. Michael Brown</h1>
+  <p class="subtitle">~ Journey to PhD ~</p>
+  <p class="tagline">From forty-three years of working life to clinical psychology. The climb is the point. The destination is bilingual psycho-oncology in Short Hills, New Jersey.</p>
+  <p class="meta">Newton, NJ → Short Hills, NJ · One mile at a time.</p>
+</div>
+
+<section id="about" class="about">
+  <h2>The Journey</h2>
+  <p class="section-subtitle">From forty-three years of working life to clinical psychology — the chapters along the way.</p>
+  <div class="about-content">
+
+    <h3 data-chapter="Chapter One">Where the road is right now</h3>
+    <p>I am a pre-doctoral psychology student preparing for clinical psychology doctoral applications in the December 2026 cycle. My focus is psycho-oncology — the psychological experience of cancer patients, survivors, and caregivers — building toward a bilingual practice (English, Spanish, Portuguese) in Short Hills, New Jersey under The Elysian Group.</p>
+
+    <p>Currently enrolled at Thomas Edison State University (TESU), accepted April 21, 2026 with ninety-plus credits transferred from Sophia Learning and CLEP. Bachelor of Arts in Psychology anticipated Spring 2027. GED Math test scheduled for May 11, 2026 — the last credential standing between me and full TESU enrollment. ACL/meniscus surgery scheduled May 19, 2026, the day after.</p>
+
+    <div class="chapter-divider">·  ·  ·</div>
+
+    <h3 data-chapter="Chapter Two">The miles already walked</h3>
+    <p>Thirty-three years inside corporate audiovisual and IT systems integration. I shipped enterprise installations for Coca-Cola (Office of the Vice President, Atlanta HQ), Atlanta Convention &amp; Visitors Bureau, the Centers for Disease Control and Prevention (multi-year federal contractor), Kennesaw State, Emory, the EPA, Georgia Department of Natural Resources, Bank South, and dozens of other clients across federal, healthcare, education, municipal, and Fortune 500 environments. Held thirty-five active or completed certifications, including industry installer/programmer Tech Level Three, Biamp TesiraFORTÉ BEE, Audinate Dante, Extron AV Associate, Barco UniSee Specialist, and the CTTV Certified Technician 1-8 ladder.</p>
+
+    <p>Across fifty-plus deployments, the recurring lesson was that outcomes were determined by leadership, change management, and how organizations integrated new tools — not by the technology itself. That observation is the bridge that eventually carried me into clinical psychology.</p>
+
+    <div class="chapter-divider">·  ·  ·</div>
+
+    <h3 data-chapter="Chapter Three">Music — the road that has run alongside</h3>
+    <p>I have been a working musician for more than forty years. Self-taught piano from age twelve. Atlanta club circuit, regional touring, studio session work. For most of the 2000s and 2010s I was playing five to six nights a week alongside the daytime AV/IT career. Still playing. Still recording. The music has always run parallel to whatever else I was doing — and it still does.</p>
+
+    <div class="chapter-divider">·  ·  ·</div>
+
+    <h3 data-chapter="Chapter Four">Why this turn in the road</h3>
+    <p>I have been living inside the question for a decade. I was diagnosed with Polycythemia Vera (a myeloproliferative blood cancer) in 2016. I lost my partner of eight years, Gloria, to breast cancer in 2013 — a six-and-a-half-year battle through second-round metastatic disease that ultimately progressed to bone. My current wife, Beth, is a breast cancer survivor whose treatment included autologous immunotherapy. What I lived through with Gloria, and what Beth and I navigate now, is the kind of experience psycho-oncology was built to address. The work I want to spend my career on is helping that field's mission reach further — into bilingual communities of northern New Jersey, into families who wouldn't otherwise find their way to it.</p>
+
+    <p>The bilingual focus reflects a clinical reality of northern New Jersey: substantial Hispanic, Brazilian-Portuguese, and Asian-American communities are underserved by English-only psycho-oncology services.</p>
+
+    <div class="chapter-divider">·  ·  ·</div>
+
+    <h3 data-chapter="Chapter Five">What's up ahead</h3>
+    <p>Doctoral applications December 2026. Doctoral program 2027–2031 — four years, then the climb continues into supervised practice. Practice opens 2031 alongside the supervised hours phase. The structure is being built piece by piece. The mountain is named. The route is being mapped one section at a time.</p>
+
+    <p class="italic">"The mountain is named. The route is mapped."</p>
+  </div>
+</section>
+
+<section id="photos" class="photos">
+  <h2>Photos</h2>
+  <p class="section-subtitle">Upload personal photos — milestones, study spaces, travel, whatever you want to keep here.</p>
+
+  <div class="photo-input">
+    <label for="photoFile">Photo:</label>
+    <input type="file" id="photoFile" accept="image/*" />
+    <input type="text" id="photoCaption" placeholder="Caption (optional)" />
+    <button onclick="addPhoto()">Add Photo</button>
+  </div>
+
+  <div class="photos-grid" id="photosGrid"></div>
+</section>
+
+<div class="photo-modal" id="photoModal" onclick="closeModal()">
+  <button class="close-modal" onclick="closeModal()">×</button>
+  <img id="modalImg" src="" alt="" />
+</div>
+
+<section id="videos" class="videos">
+  <h2>Videos</h2>
+  <p class="section-subtitle">Drop in any YouTube URL — research talks, music, milestones, anything you want to keep.</p>
+
+  <div class="video-input">
+    <input type="text" id="videoUrl" placeholder="Paste YouTube URL (e.g., https://youtube.com/watch?v=...)" />
+    <button onclick="addVideo()">Add Video</button>
+  </div>
+
+  <div class="videos-grid" id="videosGrid"></div>
+</section>
+
+<section id="contact" class="contact-section">
+  <h2>Connect</h2>
+  <p class="section-subtitle">Walk along on the journey.</p>
+
+  <p class="invitation">Please follow along on social — and if you'd like to reach out directly, the door is open.</p>
+
+  <div class="social-grid">
+    <a href="https://www.linkedin.com/in/d-michael-brown-81769a407" target="_blank" rel="noopener" class="social-card linkedin" aria-label="LinkedIn">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        </svg>
+      </span>
+      <span class="platform">LinkedIn</span>
+      <span class="handle">D. Michael Brown</span>
+    </a>
+    <a href="https://www.instagram.com/d.michaelbrown_/" target="_blank" rel="noopener" class="social-card instagram" aria-label="Instagram">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </span>
+      <span class="platform">Instagram</span>
+      <span class="handle">@d.michaelbrown_</span>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61572094803966" target="_blank" rel="noopener" class="social-card facebook" aria-label="Facebook">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+        </svg>
+      </span>
+      <span class="platform">Facebook</span>
+      <span class="handle">D. Michael Brown</span>
+    </a>
+  </div>
+
+  <div class="direct-contact">
+    <h3>Direct</h3>
+    <p class="email-line"><a href="mailto:psycd007@gmail.com">psycd007@gmail.com</a></p>
+    <p class="phone-line">
+      <a href="tel:+19734040080">(973) 404-0080</a>
+    </p>
+  </div>
+
+  <div class="signup-card">
+    <h3>Join the journey</h3>
+    <p class="signup-blurb">Occasional updates from the road — milestones, study reflections, the climb from GED to PhD. No spam, ever.</p>
+    <form name="journey-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="signup-form" id="signupForm">
+      <input type="hidden" name="form-name" value="journey-signup" />
+      <p class="hp"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="signup-success" id="signupSuccess">
+      Thank you. You're on the journey. Check your inbox occasionally — the next update will land when there's something real to share.
+    </div>
+    <p class="signup-tiny">I'll never share your email. You can unsubscribe anytime.</p>
+  </div>
+</section>
+
+<footer>
+  <p class="meta">D. Michael Brown · The Elysian Group, Short Hills NJ · 2026</p>
+</footer>
+
+<script>
+  // ============================================================
+  // Active nav highlight
+  // ============================================================
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = ['home', 'about', 'photos', 'videos', 'contact'].map(id => document.getElementById(id));
+
+  function updateActiveNav() {
+    const scrollPos = window.scrollY + 80;
+    let current = 'home';
+    sections.forEach(sec => {
+      if (sec && sec.offsetTop <= scrollPos) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav);
+
+  // ============================================================
+  // Photos — file upload, base64, localStorage
+  // ============================================================
+  const photosGrid = document.getElementById('photosGrid');
+
+  function loadPhotos() {
+    try { return JSON.parse(localStorage.getItem('dmb_photos') || '[]'); }
+    catch { return []; }
+  }
+
+  function savePhotos(arr) {
+    try { localStorage.setItem('dmb_photos', JSON.stringify(arr)); }
+    catch (e) {
+      alert('Storage limit reached — try removing older photos. Browser localStorage caps around 5-10MB total.');
+    }
+  }
+
+  function renderPhotos() {
+    const list = loadPhotos();
+    photosGrid.innerHTML = '';
+    if (list.length === 0) {
+      photosGrid.innerHTML = '<p class="photos-empty">No photos yet. Use the upload form above to add your first.</p>';
+      return;
+    }
+    list.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'photo-card';
+      card.innerHTML = `
+        <img src="${p.data}" alt="${p.caption || 'Photo'}" onclick="openModal('${p.data.replace(/'/g, "\\'")}')" />
+        <div class="photo-meta">
+          <div class="caption">${p.caption || '(no caption)'}<br><small style="color: var(--text-light);">Added ${p.added}</small></div>
+          <div class="photo-actions">
+            <button onclick="removePhoto(${idx})">Remove</button>
+          </div>
+        </div>
+      `;
+      photosGrid.appendChild(card);
+    });
+  }
+
+  function addPhoto() {
+    const file = document.getElementById('photoFile').files[0];
+    const caption = document.getElementById('photoCaption').value.trim();
+    if (!file) {
+      alert('Pick a photo file first.');
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      alert('That file is not an image.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const list = loadPhotos();
+      const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      list.unshift({ data: e.target.result, caption, added: today });
+      savePhotos(list);
+      document.getElementById('photoFile').value = '';
+      document.getElementById('photoCaption').value = '';
+      renderPhotos();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removePhoto(idx) {
+    if (!confirm('Remove this photo?')) return;
+    const list = loadPhotos();
+    list.splice(idx, 1);
+    savePhotos(list);
+    renderPhotos();
+  }
+
+  function openModal(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('photoModal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('photoModal').classList.remove('active');
+  }
+
+  // ESC to close modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ============================================================
+  // Videos — YouTube embed, localStorage
+  // ============================================================
+  const videosGrid = document.getElementById('videosGrid');
+
+  function getYouTubeId(url) {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+    ];
+    for (const p of patterns) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  function loadVideos() {
+    try { return JSON.parse(localStorage.getItem('dmb_videos') || '[]'); }
+    catch { return []; }
+  }
+
+  function saveVideos(arr) {
+    try { localStorage.setItem('dmb_videos', JSON.stringify(arr)); }
+    catch {}
+  }
+
+  function renderVideos() {
+    const list = loadVideos();
+    videosGrid.innerHTML = '';
+    if (list.length === 0) {
+      videosGrid.innerHTML = '<p class="videos-empty">No videos yet. Paste a YouTube URL above to add your first.</p>';
+      return;
+    }
+    list.forEach((v, idx) => {
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      card.innerHTML = `
+        <iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>
+        <div class="video-meta">
+          <span>Added ${v.added}</span>
+          <button onclick="removeVideo(${idx})">Remove</button>
+        </div>
+      `;
+      videosGrid.appendChild(card);
+    });
+  }
+
+  function addVideo() {
+    const input = document.getElementById('videoUrl');
+    const url = input.value.trim();
+    if (!url) return;
+    const id = getYouTubeId(url);
+    if (!id) {
+      alert('Could not parse a YouTube ID from that URL. Try a standard youtube.com/watch?v=... or youtu.be/... link.');
+      return;
+    }
+    const list = loadVideos();
+    const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    list.unshift({ id, added: today });
+    saveVideos(list);
+    input.value = '';
+    renderVideos();
+  }
+
+  function removeVideo(idx) {
+    const list = loadVideos();
+    list.splice(idx, 1);
+    saveVideos(list);
+    renderVideos();
+  }
+
+  // Initial render
+  renderPhotos();
+  renderVideos();
+
+  // ============================================================
+  // Email signup — submit via fetch, show inline success
+  // ============================================================
+  const signupForm = document.getElementById('signupForm');
+  const signupSuccess = document.getElementById('signupSuccess');
+  if (signupForm) {
+    signupForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(signupForm);
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        });
+        if (response.ok) {
+          signupForm.style.display = 'none';
+          signupSuccess.classList.add('active');
+        } else {
+          alert('Something went wrong. Please try again or email psycd007@gmail.com directly.');
+        }
+      } catch (err) {
+        alert('Network issue. Please try again or email psycd007@gmail.com directly.');
+      }
+    });
+  }
+</script>
+</body>
+</html>
