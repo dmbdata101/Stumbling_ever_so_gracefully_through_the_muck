@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Application Tracker">
+<meta name="theme-color" content="#5D1A5A">
+<title>Application Tracker — Dave Brown</title>
+<style>
+/* ========== RESET & BASE ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #F7F1F5;
+  color: #1a202c;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ========== TOP NAV BAR ========== */
+.top-bar {
+  background: linear-gradient(135deg, #5D1A5A 0%, #8B3A8C 100%);
+  color: white;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.top-bar .logo { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+.top-bar .logo span { color: #D4AF37; }
+.top-bar .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.top-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.top-btn:hover { background: rgba(255,255,255,0.25); }
+
+/* ========== TAB BAR ========== */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 24px 0;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: sticky;
+  top: 60px;
+  z-index: 900;
+}
+.tab {
+  background: transparent;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.tab:hover { color: #5D1A5A; }
+.tab.active { color: #5D1A5A; border-bottom-color: #D4AF37; }
+.tab-emoji { margin-right: 6px; }
+
+/* ========== CONTENT ========== */
+.page { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+.page.active { display: block; }
+.page-header { margin-bottom: 20px; }
+.page-header h1 {
+  font-size: 26px; font-weight: 800; color: #5D1A5A; margin-bottom: 4px;
+}
+.page-header p { font-size: 14px; color: #64748b; }
+
+/* ========== TABLE ========== */
+.table-wrap {
+  background: white; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border: 1px solid #e2e8f0;
+}
+table { width: 100%; border-collapse: collapse; min-width: 600px; }
+thead th {
+  background: #5D1A5A;
+  color: white;
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  position: sticky; top: 0;
+}
+tbody td {
+  padding: 0;
+  border-bottom: 1px solid #eef2f6;
+  vertical-align: middle;
+}
+tbody tr:hover { background: #f9fbfd; }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Editable cells */
+.cell-input {
+  width: 100%;
+  border: none;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  background: transparent;
+  color: #1a202c;
+  outline: none;
+  min-height: 44px;
+}
+.cell-input:focus { background: #FAF1E4; box-shadow: inset 0 0 0 2px #D4AF37; }
+.cell-input::placeholder { color: #cbd5e0; font-style: italic; }
+
+textarea.cell-input { resize: vertical; min-height: 44px; max-height: 200px; padding-top: 10px; }
+
+select.cell-input { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%2364748b' d='M6 8L0 2l1.4-1.4L6 5.2 10.6.6 12 2z'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 32px; cursor: pointer; }
+
+/* Status pill display */
+.status-pill {
+  display: inline-block; padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+}
+.status-notstarted { background: #e2e8f0; color: #475569; }
+.status-inprogress { background: #dbeafe; color: #1e40af; }
+.status-submitted   { background: #fef3c7; color: #92400e; }
+.status-interview   { background: #ede9fe; color: #5b21b6; }
+.status-accepted    { background: #d1fae5; color: #065f46; }
+.status-rejected    { background: #fee2e2; color: #991b1b; }
+.status-completed   { background: #d1fae5; color: #065f46; }
+.status-passed      { background: #d1fae5; color: #065f46; }
+.status-failed      { background: #fee2e2; color: #991b1b; }
+.status-studying    { background: #fef3c7; color: #92400e; }
+.status-scheduled   { background: #dbeafe; color: #1e40af; }
+.status-waiting     { background: #fef3c7; color: #92400e; }
+
+/* Delete row button */
+.row-del {
+  background: transparent; border: none; color: #cbd5e0;
+  font-size: 20px; cursor: pointer; padding: 0 10px;
+  transition: color 0.15s; line-height: 1;
+}
+.row-del:hover { color: #e74c3c; }
+
+/* Add row button */
+.add-row-btn {
+  margin-top: 14px;
+  background: white;
+  color: #5D1A5A;
+  border: 2px dashed #cbd5e0;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  width: 100%;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.add-row-btn:hover { border-color: #5D1A5A; background: #f0f7fd; color: #3D0E3A; }
+
+/* Section summary bar */
+.summary {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  background: white; border-radius: 10px;
+  padding: 14px 20px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+}
+.summary-item { display: flex; flex-direction: column; }
+.summary-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+.summary-value { font-size: 20px; color: #5D1A5A; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Info callout */
+.callout {
+  background: #F9F0DE;
+  border-left: 4px solid #D4AF37;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #7c5c00;
+}
+
+/* Custom section — free-form blocks */
+.custom-block {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid #e2e8f0;
+}
+.custom-block-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+.custom-block-title {
+  flex: 1;
+  font-size: 16px; font-weight: 700;
+  border: none; padding: 6px 10px;
+  background: #f7fafc;
+  border-radius: 6px;
+  color: #5D1A5A;
+  font-family: inherit;
+}
+.custom-block-title:focus { outline: 2px solid #D4AF37; }
+.custom-block-body {
+  width: 100%;
+  min-height: 90px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  color: #1a202c;
+}
+.custom-block-body:focus { outline: 2px solid #D4AF37; border-color: #D4AF37; }
+.custom-del {
+  background: #fee2e2; color: #991b1b;
+  border: none; padding: 6px 10px;
+  border-radius: 6px; font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Footer */
+.app-footer {
+  text-align: center; padding: 24px; margin-top: 20px;
+  color: #64748b; font-size: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+.app-footer strong { color: #5D1A5A; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: #1a202c; color: white;
+  padding: 10px 18px; border-radius: 24px;
+  font-size: 13px; font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s, bottom 0.25s;
+  z-index: 2000;
+}
+.toast.show { opacity: 1; bottom: 30px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-bar { padding: 10px 12px; }
+  .top-bar .logo { font-size: 18px; }
+  .top-btn { padding: 6px 10px; font-size: 12px; }
+  .tabs { padding: 8px 12px 0; top: 54px; }
+  .tab { padding: 8px 12px; font-size: 13px; }
+  .tab-emoji { margin-right: 3px; }
+  .page { padding: 14px 12px; }
+  .page-header h1 { font-size: 20px; }
+  table { min-width: 900px; }  /* keeps columns readable; horizontal scroll on mobile */
+  .summary-value { font-size: 16px; }
+}
+
+/* Print */
+@media print {
+  .top-bar, .tabs, .add-row-btn, .row-del, .custom-del, .top-btn { display: none !important; }
+  .page { display: block !important; padding: 0 !important; page-break-after: always; }
+  .table-wrap { box-shadow: none; border: 1px solid #000; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo">APPLICATION <span>TRACKER</span></div>
+  <div class="actions">
+    <button class="top-btn" onclick="exportJson()">Export</button>
+    <button class="top-btn" onclick="document.getElementById('importFile').click()">Import</button>
+    <button class="top-btn" onclick="resetToSeed()" style="background: rgba(241,196,15,0.3); border-color: rgba(241,196,15,0.5);">Load Starter</button>
+    <button class="top-btn" onclick="printPage()">Print</button>
+    <button class="top-btn" onclick="clearAll()" style="background: rgba(231,76,60,0.3); border-color: rgba(231,76,60,0.5);">Reset</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJson(event)">
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('ged')"><span class="tab-emoji">🎓</span>GED Path</button>
+  <button class="tab" onclick="switchTab('tc')"><span class="tab-emoji">🔁</span>Transfer Credits</button>
+  <button class="tab" onclick="switchTab('ba')"><span class="tab-emoji">📚</span>BA Path</button>
+  <button class="tab" onclick="switchTab('phd')"><span class="tab-emoji">🎯</span>Doctorate</button>
+  <button class="tab" onclick="switchTab('pi')"><span class="tab-emoji">👨‍🏫</span>PI / Professors</button>
+  <button class="tab" onclick="switchTab('dates')"><span class="tab-emoji">📅</span>Key Dates</button>
+  <button class="tab" onclick="switchTab('custom')"><span class="tab-emoji">✨</span>Custom</button>
+</div>
+
+<!-- ============== GED PATH ============== -->
+<div class="page active" id="page-ged">
+  <div class="page-header">
+    <h1>🎓 GED Path</h1>
+    <p>Track all four GED subject tests: test date, study status, score, pass/fail.</p>
+  </div>
+  <div class="callout">Tip: GED passing score is 145. College-ready 165+. College-credit 175+. Max 200. &nbsp; • &nbsp; <strong>GED → GPA formula:</strong> (Σ scores ÷ 4 subjects) ÷ 200 × 4.0. E.g. Math 170 + Sci 160 + Soc 170 + LA 170 = 670 → avg 167.5 → 3.35 GPA.</div>
+
+  <div class="summary" id="ged-summary"></div>
+
+  <div class="table-wrap">
+    <table id="ged-table">
+      <thead>
+        <tr>
+          <th style="width:20%">Subject</th>
+          <th style="width:16%">Test Date</th>
+          <th style="width:18%">Study Status</th>
+          <th style="width:12%">Score</th>
+          <th style="width:14%">Pass / Fail</th>
+          <th>Notes</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="ged-body"></tbody>
+    </table>
+  </div>
+  <button class="add-row-btn" onclick="addRow('ged')">+ Add Subject Row</button>
+</div>
+
+<!-- ============== TRANSFER CREDITS ============== -->
+<div class="page" id="page-tc">
+  <div class="page-header">
+    <h1>🔁 Transfer Credits</h1>
+    <p>Every course you take on Sophia.com or Study.com for transfer into TESU. Track provider, credits, grade, and TESU acceptance.</p>
+  </div>
+  <div class="callout">Sophia.com and Study.com are both ACE-recommended. TESU accepts up to ~80 transfer credits of 120 total. Target: 72 Sophia credits (24 courses × 3 cr) + additional Study.com / CLEP as needed.</div>
+
+  <div class="summary" id="tc-summary"></div>
+
+  <div class="table-wrap">
+    <table id="tc-table">
+      <thead>
+        <tr>
+          <th style="width:26%">Course Name</th>
+          <th style="width:12%">Provider</th>
+          <th style="width:8%">Credits</th>
+          <th style="width:12%">Status</th>
+          <th style="width:9%">Grade</th>
+          <th style="width:11%">Completed</th>
+          <th style="width:12%">TESU Accepted</th>
+          <th>Notes</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="tc-body"></tbody>
+    </table>
+  </div>
+  <button class="add-row-btn" onclick="addRow('tc')">+ Add Transfer Course</button>
+</div>
+
+<!-- ============== BA PATH ============== -->
+<div class="page" id="page-ba">
+  <div class="page-header">
+    <h1>📚 BA Path (TESU + Transfer Credits)</h1>
+    <p>Sophia / Study.com courses, TESU milestones, credit transfer tracking.</p>
+  </div>
+
+  <!-- TESU Student ID card — prominent, copyable -->
+  <div style="background: linear-gradient(135deg, #5D1A5A 0%, #8B3A8C 100%); color: white; padding: 14px 20px; border-radius: 12px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 4px 12px rgba(93,26,90,0.25); flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="font-size: 28px;">🎓</div>
+      <div>
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #D4AF37; font-weight: 700;">Thomas Edison State University</div>
+        <div style="font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 2px;">Student ID</div>
+      </div>
+    </div>
+    <div id="tesuId" style="font-family: 'Menlo', 'Courier New', monospace; font-size: 28px; font-weight: 800; color: #D4AF37; letter-spacing: 3px; user-select: all; cursor: pointer;" onclick="copyTesuId()" title="Click to copy">0739216</div>
+  </div>
+
+  <div class="callout">TESU BA requires 120 credits. Sophia + Study.com + CLEP contribute transfer credits. Target TESU enrollment: September 2026.</div>
+
+  <div class="summary" id="ba-summary"></div>
+
+  <div class="table-wrap">
+    <table id="ba-table">
+      <thead>
+        <tr>
+          <th style="width:26%">Course / Milestone</th>
+          <th style="width:14%">Source</th>
+          <th style="width:10%">Credits</th>
+          <th style="width:14%">Status</th>
+          <th style="width:14%">Completed</th>
+          <th style="width:14%">Transfer Status</th>
+          <th>Notes</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="ba-body"></tbody>
+    </table>
+  </div>
+  <button class="add-row-btn" onclick="addRow('ba')">+ Add Course / Milestone</button>
+</div>
+
+<!-- ============== DOCTORATE APPLICATIONS ============== -->
+<div class="page" id="page-phd">
+  <div class="page-header">
+    <h1>🎯 Doctorate Applications</h1>
+    <p>Every school, every deadline, every PI contact, every status update.</p>
+  </div>
+  <div class="callout">Application status pipeline: Not Started → In Progress → Submitted → Interview → Accepted / Rejected. Keep notes per school.</div>
+
+  <div class="summary" id="phd-summary"></div>
+
+  <div class="table-wrap">
+    <table id="phd-table">
+      <thead>
+        <tr>
+          <th style="width:14%">School</th>
+          <th style="width:7%">Type</th>
+          <th style="width:10%">Location</th>
+          <th style="width:8%">Drive</th>
+          <th style="width:8%">Tuition/yr</th>
+          <th style="width:8%">Total Cost</th>
+          <th style="width:10%">App Deadline</th>
+          <th style="width:10%">PI Contact</th>
+          <th style="width:10%">App Status</th>
+          <th style="width:9%">Letter Date</th>
+          <th style="width:10%">Decision</th>
+          <th>Notes</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="phd-body"></tbody>
+    </table>
+  </div>
+  <button class="add-row-btn" onclick="addRow('phd')">+ Add School</button>
+</div>
+
+<!-- ============== PI / PROFESSORS ============== -->
+<div class="page" id="page-pi">
+  <div class="page-header">
+    <h1>👨‍🏫 PI / Professors</h1>
+    <p>Every faculty member you're tracking — research-fit contacts, email threads, interest temperature, next actions.</p>
+  </div>
+  <div class="callout">PhD admissions live and die on PI fit. Track every email, every call, every response time. "Warm/Hot" = replied with interest. "Cold" = sent but no reply yet. "Dead" = clearly not a fit or ghost-ed.</div>
+
+  <div class="summary" id="pi-summary"></div>
+
+  <div class="table-wrap">
+    <table id="pi-table">
+      <thead>
+        <tr>
+          <th style="width:14%">PI Name</th>
+          <th style="width:13%">School</th>
+          <th style="width:15%">Research Area</th>
+          <th style="width:14%">Email</th>
+          <th style="width:10%">Last Contact</th>
+          <th style="width:10%">Method</th>
+          <th style="width:9%">Response?</th>
+          <th style="width:10%">Interest</th>
+          <th>Next Action / Notes</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="pi-body"></tbody>
+    </table>
+  </div>
+  <button class="add-row-btn" onclick="addRow('pi')">+ Add PI / Professor</button>
+</div>
+
+<!-- ============== KEY DATES ============== -->
+<div class="page" id="page-dates">
+  <div class="page-header">
+    <h1>📅 Key Dates & Deadlines</h1>
+    <p>Cross-path timeline. Everything that needs a date on the calendar.</p>
+  </div>
+  <div class="callout">Sorts automatically by date ascending. Past items stay visible — they're the record.</div>
+
+  <div class="summary" id="dates-summary"></div>
+
+  <div class="table-wrap">
+    <table id="dates-table">
+      <thead>
+        <tr>
+          <th style="width:14%">Date</th>
+          <th style="width:12%">Path</th>
+          <th style="width:26%">Event / Deadline</th>
+          <th style="width:12%">Status</th>
+          <th>Notes</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="dates-body"></tbody>
+    </table>
+  </div>
+  <button class="add-row-btn" onclick="addRow('dates')">+ Add Date / Deadline</button>
+  <button class="add-row-btn" onclick="sortDates()" style="margin-top:8px; border-style: solid; border-color: #5D1A5A; background: #e6f0fa;">↕ Re-sort by Date</button>
+</div>
+
+<!-- ============== CUSTOM (blank, flexible) ============== -->
+<div class="page" id="page-custom">
+  <div class="page-header">
+    <h1>✨ Custom Section</h1>
+    <p>Blank canvas. Name each block whatever you want. Body is free-form text. Use it for GED practice-score tracking, study-hour logs, side projects, or anything that doesn't fit the other four sections.</p>
+  </div>
+  <div id="custom-body"></div>
+  <button class="add-row-btn" onclick="addCustomBlock()">+ Add Block</button>
+</div>
+
+<div class="app-footer">
+  <strong>Application Tracker</strong> · Built for Dave Brown · Runs 100% offline · All data stored locally in your browser<br>
+  To back up: click <em>Export</em> and save the JSON file to your Desktop, DavesBrain, or iCloud.
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA MODEL
+// ============================================================
+const SCHEMA = {
+  ged: {
+    cols: [
+      { key: 'subject',  type: 'input', placeholder: 'Math / Science / Social / LA' },
+      { key: 'testDate', type: 'date' },
+      { key: 'status',   type: 'select', options: ['','Not Started','Studying','Scheduled','Completed'] },
+      { key: 'score',    type: 'input', placeholder: '0-200' },
+      { key: 'passFail', type: 'select', options: ['','Passed','Failed','Waiting'] },
+      { key: 'notes',    type: 'textarea', placeholder: 'Study resources, weak spots, test center info...' }
+    ]
+  },
+  ba: {
+    cols: [
+      { key: 'course',   type: 'input', placeholder: 'Course name / milestone' },
+      { key: 'source',   type: 'select', options: ['','Sophia.com','Study.com','CLEP','TESU','Other'] },
+      { key: 'credits',  type: 'input', placeholder: '3' },
+      { key: 'status',   type: 'select', options: ['','Not Started','In Progress','Completed'] },
+      { key: 'completed',type: 'date' },
+      { key: 'transfer', type: 'select', options: ['','Pending','Accepted','Rejected','Not Applicable'] },
+      { key: 'notes',    type: 'textarea', placeholder: 'TESU equivalent, reviewer feedback...' }
+    ]
+  },
+  tc: {
+    cols: [
+      { key: 'course',    type: 'input',  placeholder: 'Course name (e.g. Intro to Ethics)' },
+      { key: 'provider',  type: 'select', options: ['','Sophia.com','Study.com'] },
+      { key: 'credits',   type: 'input',  placeholder: '3' },
+      { key: 'status',    type: 'select', options: ['','Not Started','In Progress','Completed'] },
+      { key: 'grade',     type: 'input',  placeholder: 'A / B / % / Pass' },
+      { key: 'completed', type: 'date' },
+      { key: 'tesuAccepted', type: 'select', options: ['','Pending','Accepted','Rejected','Not Yet Submitted'] },
+      { key: 'notes',     type: 'textarea', placeholder: 'TESU equivalent, phase, notes...' }
+    ]
+  },
+  phd: {
+    cols: [
+      { key: 'school',    type: 'input',  placeholder: 'University name' },
+      { key: 'type',      type: 'select', options: ['','PhD','PsyD','MS','Other'] },
+      { key: 'location',  type: 'input',  placeholder: 'City, State' },
+      { key: 'driveTime', type: 'input',  placeholder: 'e.g. 1h 20m' },
+      { key: 'tuition',   type: 'input',  placeholder: '$' },
+      { key: 'total',     type: 'input',  placeholder: '$' },
+      { key: 'deadline',  type: 'date' },
+      { key: 'pi',        type: 'input',  placeholder: 'PI name' },
+      { key: 'status',    type: 'select', options: ['','Not Started','In Progress','Submitted','Interview','Decision Pending'] },
+      { key: 'letterDate',type: 'date' },
+      { key: 'decision',  type: 'select', options: ['','Accepted','Rejected','Waitlisted','Deferred','Withdrew'] },
+      { key: 'notes',     type: 'textarea', placeholder: 'Fit notes, essay drafts, why this PI...' }
+    ]
+  },
+  pi: {
+    cols: [
+      { key: 'name',      type: 'input',  placeholder: 'Dr. Last Name' },
+      { key: 'school',    type: 'input',  placeholder: 'University' },
+      { key: 'research',  type: 'input',  placeholder: 'e.g. psycho-oncology, cognitive neuroscience' },
+      { key: 'email',     type: 'input',  placeholder: 'name@school.edu' },
+      { key: 'lastContact', type: 'date' },
+      { key: 'method',    type: 'select', options: ['','Email','Phone','Video Call','In-Person','LinkedIn','Other'] },
+      { key: 'response',  type: 'select', options: ['','Replied','Awaiting','No Response','Bounce'] },
+      { key: 'interest',  type: 'select', options: ['','Cold','Warm','Hot','Dead','Mutual'] },
+      { key: 'notes',     type: 'textarea', placeholder: 'Next action, thread summary, research fit...' }
+    ]
+  },
+  dates: {
+    cols: [
+      { key: 'date',   type: 'date' },
+      { key: 'path',   type: 'select', options: ['','GED','BA','Doctorate','Life','Other'] },
+      { key: 'event',  type: 'input', placeholder: 'What\'s happening?' },
+      { key: 'status', type: 'select', options: ['','Upcoming','Done','Missed','Rescheduled'] },
+      { key: 'notes',  type: 'textarea', placeholder: 'Details, reminders, prep notes...' }
+    ]
+  }
+};
+
+// ============================================================
+// STATE
+// ============================================================
+// ============================================================
+// SEED DATA — Dave's starter set (auto-loads on first open)
+// ============================================================
+const SEED_DATA = {
+  "ged": [
+    {"subject": "Mathematical Reasoning", "testDate": "2026-05-18", "status": "Scheduled", "score": "", "passFail": "Waiting", "notes": "Target 200. Dr. Homer sees this score."},
+    {"subject": "Reasoning Through Language Arts", "testDate": "", "status": "Completed", "score": "153", "passFail": "Passed", "notes": "Zero studying — passed cold."},
+    {"subject": "Science", "testDate": "", "status": "Completed", "score": "151", "passFail": "Passed", "notes": "Zero studying — passed cold."},
+    {"subject": "Social Studies", "testDate": "", "status": "Completed", "score": "164", "passFail": "Passed", "notes": "Zero studying — passed cold."}
+  ],
+  "tc": [
+    {"course": "Visual Communications", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Introduction to Information Technology", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Introduction to Ethics", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Foundations of English Composition", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Approaches to Studying Religions", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Ancient Greek Philosophers", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Conflict Resolution", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Project Management", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 1 — Quick Win"},
+    {"course": "Introduction to Psychology", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "Introduction to Sociology", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "Macroeconomics", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "Microeconomics", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "Introduction to Statistics", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "English Composition II", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "US History I", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "US History II", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "Art History I", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "Developmental Psychology", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 2 — Core Gen Ed"},
+    {"course": "Environmental Science", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 3 — Heavy"},
+    {"course": "Human Biology", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 3 — Heavy"},
+    {"course": "College Algebra", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 3 — Heavy"},
+    {"course": "Introduction to Communication", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 3 — Heavy"},
+    {"course": "Abnormal Psychology", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 3 — Heavy · DIRECTLY relevant to PhD target"},
+    {"course": "Social Psychology", "provider": "Sophia.com", "credits": "3", "status": "", "grade": "", "completed": "", "tesuAccepted": "", "notes": "Phase 3 — Heavy · DIRECTLY relevant to PhD target"},
+    {"course": "[PLACEHOLDER] Study.com — TESU confirmation pending", "provider": "Study.com", "credits": "", "status": "Not Started", "grade": "", "completed": "", "tesuAccepted": "Not Yet Submitted", "notes": "Waiting on Kyle Higgins to confirm which Study.com courses TESU accepts. Fill this in once confirmed."}
+  ],
+  "ba": [
+    {"course": "TESU Application Submitted", "source": "TESU", "credits": "", "status": "Completed", "completed": "2026-04-21", "transfer": "Not Applicable", "notes": "Accepted. First college acceptance ever."},
+    {"course": "Register for TESU courses (after GED)", "source": "TESU", "credits": "", "status": "Not Started", "completed": "", "transfer": "Not Applicable", "notes": "Late May 2026 once GED Math is in hand."},
+    {"course": "BA in Psychology — Complete", "source": "TESU", "credits": "120", "status": "Not Started", "completed": "", "transfer": "Not Applicable", "notes": "Target: Late Spring 2027."}
+  ],
+  "phd": [
+    {"school": "Rutgers", "type": "PhD", "location": "New Brunswick, NJ", "driveTime": "30 min", "tuition": "$0 (funded)", "total": "Earn ~$125-150K over 5 yr stipend", "deadline": "2026-12-01", "pi": "Dr. Samantha Farris", "status": "Not Started", "letterDate": "", "decision": "", "notes": "PRIMARY TARGET. REHAB Lab. Rutgers Cancer Institute of NJ on campus. No GRE. Full funding 5 yrs."},
+    {"school": "Montclair State", "type": "PhD", "location": "Montclair, NJ", "driveTime": "20 min", "tuition": "$0 + stipend", "total": "Verify 4-yr stipend", "deadline": "2026-12-01", "pi": "Dr. Alexandra Gaynor", "status": "Not Started", "letterDate": "", "decision": "", "notes": "MSK postdoc in neurocognitive/cancer. Closest commute. No GRE."},
+    {"school": "Rowan", "type": "PhD", "location": "Glassboro, NJ", "driveTime": "90 min", "tuition": "$1K/sem", "total": "$8K tuition, earn ~$43K over 5 yr = ~$35K ahead", "deadline": "2026-12-15", "pi": "Dr. Georita Frierson", "status": "Not Started", "letterDate": "", "decision": "", "notes": "STRONGEST psycho-oncology fit on the list. Dr. Frierson studies breast-cancer survivors directly. MD Anderson affiliation."},
+    {"school": "William Paterson", "type": "PsyD", "location": "Wayne, NJ", "driveTime": "25 min", "tuition": "~$16K/yr or $0 w/assistantship", "total": "$0-$85K", "deadline": "2026-12-01", "pi": "Dr. William Ernst", "status": "Not Started", "letterDate": "", "decision": "", "notes": "Realistic safety. 15-25% acceptance rate. Apply for assistantship by March 15."},
+    {"school": "CUNY Graduate Center", "type": "PhD", "location": "Manhattan, NY", "driveTime": "50 min train", "tuition": "$0 + $31,141/yr stipend", "total": "Earn ~$155K over 5 yr", "deadline": "2026-12-01", "pi": "Dr. Jennifer Ford", "status": "Not Started", "letterDate": "", "decision": "", "notes": "Dr. Ford runs Psycho-Oncology Lab at Hunter. Formal NCI-funded MSK partnership since 2002. Grads placed as MSK faculty."},
+    {"school": "Penn", "type": "PhD", "location": "Philadelphia, PA", "driveTime": "90 min", "tuition": "$0 + $40,608/yr stipend", "total": "Earn ~$200K+ over 5 yr", "deadline": "2026-12-01", "pi": "TBD — Cancer Control Program", "status": "Not Started", "letterDate": "", "decision": "", "notes": "Abramson Cancer Center (NCI). Identify specific PI in Cancer Control Program. GRE optional."},
+    {"school": "NYU Steinhardt", "type": "PhD", "location": "Manhattan, NY", "driveTime": "45 min train", "tuition": "$0 + $34,883/yr stipend", "total": "Earn ~$175K over 5 yr", "deadline": "Verify", "pi": "TBD — email applied.psychology@nyu.edu", "status": "Not Started", "letterDate": "", "decision": "", "notes": "Applied Psychology dept. Perlmutter Cancer Center nearby. Verify faculty fit + exact deadline."},
+    {"school": "Fordham", "type": "PhD", "location": "Bronx, NY", "driveTime": "40 min train", "tuition": "$0 + stipend (verify $)", "total": "Verify", "deadline": "2026-12-01", "pi": "Dr. Rachel Annunziato", "status": "Not Started", "letterDate": "", "decision": "", "notes": "Pediatric health psychology. Backup PIs: Dr. Burke (health disparities), Dr. Rosenfeld (forensic/health)."},
+    {"school": "Columbia / Teachers College", "type": "PhD", "location": "Manhattan, NY", "driveTime": "40 min train", "tuition": "$0 + ~$30K/yr (3-4 yrs)", "total": "Earn ~$90-120K", "deadline": "Verify — CCPadmission@tc.columbia.edu", "pi": "Dr. Dinelia Rosa", "status": "Not Started", "letterDate": "", "decision": "", "notes": "LONG SHOT. 3-5% acceptance (6-8 spots from 500+ apps). Dr. Rosa has breast cancer clinic experience at Bellevue."},
+    {"school": "Stony Brook", "type": "PhD", "location": "Stony Brook, NY", "driveTime": "60 min drive", "tuition": "$0 + full funding", "total": "Verify stipend amount", "deadline": "2026-12-15", "pi": "TBD — Health Psych / Cancer Coping", "status": "Not Started", "letterDate": "", "decision": "", "notes": "⚠️ APA on probation. Check: does NJ accept PCSAS for licensure? Verify before applying."}
+  ],
+  "pi": [
+    {"name": "Dr. Samantha Farris", "school": "Rutgers", "research": "REHAB Lab — stress, anxiety, health behaviors", "email": "", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "PRIMARY TARGET — #1 school. Ask about volunteer RA opportunity in REHAB Lab. Target contact: Oct-Nov 2026."},
+    {"name": "Dr. Alexandra Gaynor", "school": "Montclair State", "research": "Neurocognitive outcomes + cancer history (MSK postdoc)", "email": "", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "Target contact: July-Aug 2026 (earlier — smaller program)."},
+    {"name": "Dr. Georita Frierson", "school": "Rowan", "research": "Psychosocial interventions in breast cancer survivors (hormone-sensitive + triple-negative)", "email": "", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "STRONGEST research fit on entire list. Direct psycho-oncology researcher. Email template already drafted in 03_Rowan/MISSION_PLAN.md."},
+    {"name": "Dr. Cori McMahon", "school": "Rowan", "research": "Chronic disease mgmt (cancer, HIV), end-of-life psychology", "email": "", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "Secondary PI at Rowan. Strong fit with PV experience and end-of-life angle."},
+    {"name": "Dr. William Ernst", "school": "William Paterson", "research": "Program Director · concussion research", "email": "ernstw@wpunj.edu", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "Email already known. Keep PsyD as safety. Apply for assistantship by March 15."},
+    {"name": "Dr. Jennifer Ford", "school": "CUNY Hunter", "research": "Psycho-Oncology Lab — psychosocial adjustment/coping in pediatric + YA cancer survivors", "email": "", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "Website: jennifer-ford-phd.com. Named lab, exact population match for Dave's mission. MSK pipeline through CUNY formal partnership."},
+    {"name": "TBD — Penn Cancer Control PI", "school": "Penn", "research": "Cancer Control Program — behavioral oncology", "email": "", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "Need to identify specific PI. Start with Cancer Control Program page at Abramson. Email Oct/Nov 2026."},
+    {"name": "TBD — NYU Applied Psych PI", "school": "NYU Steinhardt", "research": "Health psychology / cancer / chronic illness", "email": "applied.psychology@nyu.edu", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "Email applied.psychology@nyu.edu July 2026 to identify faculty with cancer focus + verify deadline."},
+    {"name": "Dr. Rachel Annunziato", "school": "Fordham", "research": "Pediatric health psychology", "email": "", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "Backup PIs at Fordham: Dr. Burke (health disparities), Dr. Rosenfeld (forensic/health)."},
+    {"name": "Dr. Dinelia Rosa", "school": "Columbia / Teachers College", "research": "Health psychology + breast cancer clinic experience at Bellevue", "email": "CCPadmission@tc.columbia.edu", "lastContact": "", "method": "", "response": "", "interest": "Cold", "notes": "LONG-SHOT school. Email CCPadmission@ for direct forward. Dr. Rosa's Bellevue breast-cancer clinic history is a real door."}
+  ],
+  "dates": [
+    {"date": "2026-05-10", "path": "Life", "event": "3-day warning: Namecheap $41.88 renewal coming up", "status": "Upcoming", "notes": "Don't let it run to the deadline."},
+    {"date": "2026-05-13", "path": "Life", "event": "Namecheap $41.88 renewal — PAY TODAY or email dies", "status": "Upcoming", "notes": "Protects Dave@TheElysianGroup.org. Kyle Higgins has this address."},
+    {"date": "2026-05-18", "path": "GED", "event": "🎯 GED Math Exam (9 AM - 12 PM)", "status": "Upcoming", "notes": "Target: 200. Dr. Homer sees this score."},
+    {"date": "2026-05-19", "path": "Life", "event": "🏥 ACL / Meniscus Surgery", "status": "Upcoming", "notes": "Day after GED exam."},
+    {"date": "2026-05-26", "path": "BA", "event": "Sophia course sequence starts (post-surgery week)", "status": "Upcoming", "notes": "Begin with Phase 1 quick wins."},
+    {"date": "2026-07-01", "path": "Doctorate", "event": "Begin contacting PIs (early schools like Montclair, NYU, Columbia)", "status": "Upcoming", "notes": "July to August window for early outreach."},
+    {"date": "2026-08-30", "path": "BA", "event": "Target: Sophia 24-course completion", "status": "Upcoming", "notes": "72 credits transferred to TESU by this date if on pace."},
+    {"date": "2026-09-01", "path": "BA", "event": "TESU enrollment — target start date", "status": "Upcoming", "notes": "Rolling admission: if late, October or November also fine."},
+    {"date": "2026-10-15", "path": "Life", "event": "Target: Move to Short Hills, NJ", "status": "Upcoming", "notes": "Closer to Rutgers and Montclair."},
+    {"date": "2026-10-30", "path": "Doctorate", "event": "Contact target PIs for all 10 schools", "status": "Upcoming", "notes": "Primary window for PI outreach. Must have personal statement drafted."},
+    {"date": "2026-12-01", "path": "Doctorate", "event": "Application deadline: Rutgers, Montclair, William Paterson, CUNY, Penn, Fordham", "status": "Upcoming", "notes": "6 applications due same day. Submit days early."},
+    {"date": "2026-12-15", "path": "Doctorate", "event": "Application deadline: Rowan, Stony Brook", "status": "Upcoming", "notes": "2 more applications due."},
+    {"date": "2027-02-15", "path": "Doctorate", "event": "Interview season begins (Feb-Mar 2027)", "status": "Upcoming", "notes": "Start interview prep in January."},
+    {"date": "2027-04-15", "path": "Doctorate", "event": "Offers typically arrive (Mar-Apr)", "status": "Upcoming", "notes": "Decision season."},
+    {"date": "2027-06-01", "path": "BA", "event": "Target: TESU BA completion (Late Spring 2027)", "status": "Upcoming", "notes": "BA in hand before PhD starts."},
+    {"date": "2027-09-01", "path": "Doctorate", "event": "PhD Year 1 begins (commute from Short Hills)", "status": "Upcoming", "notes": "The climb continues."}
+  ],
+  "custom": [
+    {"title": "GED Math — Practice Test Scores", "body": "Track your practice scores here as you drill through the Battle Plan.\n\nDay 1 baseline (Apr 13):\n- GED Ready Practice: 133\n- Actual GED Math (cold): 143\n\nPractice Test #1 (target May 8 per Battle Plan): \nPractice Test #2 (target May 11): \nPractice Test #3 (target May 14, goal 170+): \n\nReal test day (May 18): ___\nTarget: 200."},
+    {"title": "Research Experience — THE GAP", "body": "Per schools.md: 'Research experience = #1 gap' for PhD admissions.\n\nAction items:\n- [ ] Reach out to volunteer RA opportunities at any target lab (Dr. Farris REHAB Lab, Dr. Frierson's psycho-oncology work)\n- [ ] Consider TESU research electives\n- [ ] Consider a local community college volunteer research role near Short Hills\n- [ ] Track every lab meeting attended, every data-entry hour logged, every poster contributed\n\nThis is the #1 leverage point for PhD acceptance. Higher than essays. Higher than GPA."}
+  ]
+};
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem('apptracker_state');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const loaded = {
+        ged:    Array.isArray(parsed.ged)    ? parsed.ged    : [],
+        tc:     Array.isArray(parsed.tc)     ? parsed.tc     : [],
+        ba:     Array.isArray(parsed.ba)     ? parsed.ba     : [],
+        phd:    Array.isArray(parsed.phd)    ? parsed.phd    : [],
+        pi:     Array.isArray(parsed.pi)     ? parsed.pi     : [],
+        dates:  Array.isArray(parsed.dates)  ? parsed.dates  : [],
+        custom: Array.isArray(parsed.custom) ? parsed.custom : []
+      };
+      // If everything is empty (e.g., user opened before seed was baked in), use seed instead
+      const totalRows = loaded.ged.length + loaded.tc.length + loaded.ba.length
+                      + loaded.phd.length + loaded.pi.length + loaded.dates.length + loaded.custom.length;
+      if (totalRows === 0) return JSON.parse(JSON.stringify(SEED_DATA));
+      return loaded;
+    }
+  } catch (e) {}
+  // First time — seed the tracker with Dave's baseline data
+  return JSON.parse(JSON.stringify(SEED_DATA));
+}
+
+// Manual reset to seed, available on demand
+function resetToSeed() {
+  if (!confirm('Replace current data with Dave\u2019s starter set (24 Sophia courses, 10 schools, 10 PIs, 4 GED subjects, 16 key dates)? This overwrites what you\u2019ve typed.')) return;
+  state = JSON.parse(JSON.stringify(SEED_DATA));
+  saveState();
+  render();
+  toast('Loaded starter data');
+}
+function saveState() {
+  try { localStorage.setItem('apptracker_state', JSON.stringify(state)); }
+  catch (e) { toast('Could not save to localStorage'); }
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  ['ged','tc','ba','phd','pi','dates'].forEach(renderTable);
+  renderCustom();
+  renderSummaries();
+}
+
+function renderTable(section) {
+  const tbody = document.getElementById(section + '-body');
+  tbody.innerHTML = '';
+  state[section].forEach((row, idx) => tbody.appendChild(buildRow(section, row, idx)));
+}
+
+function buildRow(section, row, idx) {
+  const tr = document.createElement('tr');
+  SCHEMA[section].cols.forEach(col => {
+    const td = document.createElement('td');
+    td.appendChild(buildField(section, idx, col, row[col.key] || ''));
+    tr.appendChild(td);
+  });
+  // delete button
+  const td = document.createElement('td');
+  const btn = document.createElement('button');
+  btn.className = 'row-del';
+  btn.innerHTML = '×';
+  btn.title = 'Delete row';
+  btn.onclick = () => { if (confirm('Delete this row?')) { state[section].splice(idx,1); saveState(); render(); } };
+  td.appendChild(btn);
+  tr.appendChild(td);
+  return tr;
+}
+
+function buildField(section, idx, col, value) {
+  let el;
+  if (col.type === 'textarea') {
+    el = document.createElement('textarea');
+    el.rows = 1;
+  } else if (col.type === 'select') {
+    el = document.createElement('select');
+    col.options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt;
+      o.textContent = opt || '—';
+      if (opt === value) o.selected = true;
+      el.appendChild(o);
+    });
+  } else if (col.type === 'date') {
+    el = document.createElement('input');
+    el.type = 'date';
+  } else {
+    el = document.createElement('input');
+    el.type = 'text';
+  }
+  el.className = 'cell-input';
+  if (col.placeholder) el.placeholder = col.placeholder;
+  if (el.tagName !== 'SELECT') el.value = value;
+  el.addEventListener('change', () => {
+    state[section][idx][col.key] = el.value;
+    saveState();
+    renderSummaries();
+  });
+  el.addEventListener('input', () => {
+    state[section][idx][col.key] = el.value;
+    saveState();
+  });
+  return el;
+}
+
+// ============================================================
+// SUMMARIES
+// ============================================================
+function renderSummaries() {
+  // GED
+  const ged = state.ged;
+  const avg = averageScoreNum(ged);
+  document.getElementById('ged-summary').innerHTML = `
+    <div class="summary-item"><span class="summary-label">Subjects Tracked</span><span class="summary-value">${ged.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Passed</span><span class="summary-value" style="color:#065f46">${ged.filter(r=>r.passFail==='Passed').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Remaining</span><span class="summary-value" style="color:#92400e">${ged.filter(r=>r.passFail!=='Passed').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Avg Score</span><span class="summary-value">${avg===null ? '—' : Math.round(avg)}</span></div>
+    <div class="summary-item"><span class="summary-label">GED → GPA</span><span class="summary-value" style="color:#8e44ad">${avg===null ? '—' : gpaFromAvg(avg).toFixed(2)}</span></div>
+  `;
+  // Transfer Credits
+  const tc = state.tc;
+  const tcSophia = tc.filter(r=>r.provider==='Sophia.com');
+  const tcStudy  = tc.filter(r=>r.provider==='Study.com');
+  const sumCredits = arr => arr.filter(r=>r.status==='Completed').reduce((s,r)=>s+(parseFloat(r.credits)||0),0);
+  document.getElementById('tc-summary').innerHTML = `
+    <div class="summary-item"><span class="summary-label">Total Courses</span><span class="summary-value">${tc.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Sophia.com ✓</span><span class="summary-value">${tcSophia.filter(r=>r.status==='Completed').length} / ${tcSophia.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Study.com ✓</span><span class="summary-value">${tcStudy.filter(r=>r.status==='Completed').length} / ${tcStudy.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Sophia Credits</span><span class="summary-value" style="color:#8e44ad">${sumCredits(tcSophia)}</span></div>
+    <div class="summary-item"><span class="summary-label">Study.com Credits</span><span class="summary-value" style="color:#8e44ad">${sumCredits(tcStudy)}</span></div>
+    <div class="summary-item"><span class="summary-label">Transfer Total</span><span class="summary-value" style="color:#065f46">${sumCredits(tc)}</span></div>
+  `;
+
+  // BA
+  const ba = state.ba;
+  const baCredits = ba.filter(r=>r.status==='Completed').reduce((s,r)=>s+(parseFloat(r.credits)||0),0);
+  document.getElementById('ba-summary').innerHTML = `
+    <div class="summary-item"><span class="summary-label">Courses Tracked</span><span class="summary-value">${ba.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Completed</span><span class="summary-value" style="color:#065f46">${ba.filter(r=>r.status==='Completed').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Credits Earned</span><span class="summary-value">${baCredits}</span></div>
+    <div class="summary-item"><span class="summary-label">Credits Toward 120</span><span class="summary-value">${baCredits} / 120</span></div>
+  `;
+  // PhD
+  const phd = state.phd;
+  document.getElementById('phd-summary').innerHTML = `
+    <div class="summary-item"><span class="summary-label">Schools</span><span class="summary-value">${phd.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Submitted</span><span class="summary-value" style="color:#92400e">${phd.filter(r=>['Submitted','Interview','Decision Pending'].includes(r.status) || r.decision).length}</span></div>
+    <div class="summary-item"><span class="summary-label">Interviews</span><span class="summary-value" style="color:#5b21b6">${phd.filter(r=>r.status==='Interview').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Accepted</span><span class="summary-value" style="color:#065f46">${phd.filter(r=>r.decision==='Accepted').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Rejected</span><span class="summary-value" style="color:#991b1b">${phd.filter(r=>r.decision==='Rejected').length}</span></div>
+  `;
+  // PI
+  const pi = state.pi;
+  document.getElementById('pi-summary').innerHTML = `
+    <div class="summary-item"><span class="summary-label">PIs Tracked</span><span class="summary-value">${pi.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Replied</span><span class="summary-value" style="color:#065f46">${pi.filter(r=>r.response==='Replied').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Awaiting</span><span class="summary-value" style="color:#92400e">${pi.filter(r=>r.response==='Awaiting').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Hot / Mutual</span><span class="summary-value" style="color:#991b1b">${pi.filter(r=>['Hot','Mutual'].includes(r.interest)).length}</span></div>
+  `;
+  // Dates
+  const d = state.dates;
+  const upcoming = d.filter(r => r.date && new Date(r.date) >= new Date(new Date().toDateString()));
+  const next = upcoming.sort((a,b)=>new Date(a.date)-new Date(b.date))[0];
+  document.getElementById('dates-summary').innerHTML = `
+    <div class="summary-item"><span class="summary-label">Total Items</span><span class="summary-value">${d.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Upcoming</span><span class="summary-value" style="color:#1e40af">${upcoming.length}</span></div>
+    <div class="summary-item"><span class="summary-label">Done</span><span class="summary-value" style="color:#065f46">${d.filter(r=>r.status==='Done').length}</span></div>
+    <div class="summary-item"><span class="summary-label">Next Up</span><span class="summary-value" style="font-size:14px">${next ? (next.event + ' · ' + next.date) : '—'}</span></div>
+  `;
+}
+
+function averageScore(ged) {
+  const avg = averageScoreNum(ged);
+  return avg === null ? '—' : Math.round(avg);
+}
+function averageScoreNum(ged) {
+  const nums = ged.map(r=>parseFloat(r.score)).filter(n=>!isNaN(n) && n>0);
+  if (!nums.length) return null;
+  return nums.reduce((a,b)=>a+b,0) / nums.length;
+}
+// GED → GPA conversion:  GPA = (average / 200) * 4.0  =  average / 50
+function gpaFromAvg(avg) {
+  if (avg == null || isNaN(avg)) return null;
+  return Math.min(4.0, (avg / 200) * 4.0);  // capped at 4.0
+}
+
+// ============================================================
+// CUSTOM BLOCKS
+// ============================================================
+function renderCustom() {
+  const wrap = document.getElementById('custom-body');
+  wrap.innerHTML = '';
+  state.custom.forEach((blk, idx) => {
+    const el = document.createElement('div');
+    el.className = 'custom-block';
+    el.innerHTML = `
+      <div class="custom-block-head">
+        <input class="custom-block-title" placeholder="Block title (e.g. GED Math Practice Scores)">
+        <button class="custom-del">× Delete</button>
+      </div>
+      <textarea class="custom-block-body" placeholder="Free-form text — use however you like."></textarea>
+    `;
+    const titleEl = el.querySelector('.custom-block-title');
+    const bodyEl  = el.querySelector('.custom-block-body');
+    const delBtn  = el.querySelector('.custom-del');
+    titleEl.value = blk.title || '';
+    bodyEl.value  = blk.body || '';
+    titleEl.addEventListener('input', () => { state.custom[idx].title = titleEl.value; saveState(); });
+    bodyEl.addEventListener('input',  () => { state.custom[idx].body  = bodyEl.value;  saveState(); });
+    delBtn.onclick = () => { if (confirm('Delete this block?')) { state.custom.splice(idx,1); saveState(); renderCustom(); } };
+    wrap.appendChild(el);
+  });
+}
+
+function addCustomBlock() {
+  state.custom.push({ title: '', body: '' });
+  saveState();
+  renderCustom();
+}
+
+// ============================================================
+// ADD / SORT / NAV
+// ============================================================
+function addRow(section) {
+  const blank = {};
+  SCHEMA[section].cols.forEach(c => blank[c.key] = '');
+  state[section].push(blank);
+  saveState();
+  renderTable(section);
+  renderSummaries();
+}
+
+function sortDates() {
+  state.dates.sort((a,b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return new Date(a.date) - new Date(b.date);
+  });
+  saveState();
+  renderTable('dates');
+  toast('Dates sorted');
+}
+
+function switchTab(section) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  event.target.closest('.tab').classList.add('active');
+  document.getElementById('page-' + section).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// EXPORT / IMPORT / RESET / PRINT
+// ============================================================
+function exportJson() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `application_tracker_backup_${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Exported');
+}
+
+function importJson(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!confirm('Replace current data with imported file? (Export a backup first if unsure.)')) return;
+      state = {
+        ged: Array.isArray(data.ged) ? data.ged : [],
+        tc: Array.isArray(data.tc) ? data.tc : [],
+        ba: Array.isArray(data.ba) ? data.ba : [],
+        phd: Array.isArray(data.phd) ? data.phd : [],
+        pi: Array.isArray(data.pi) ? data.pi : [],
+        dates: Array.isArray(data.dates) ? data.dates : [],
+        custom: Array.isArray(data.custom) ? data.custom : []
+      };
+      saveState();
+      render();
+      toast('Imported');
+    } catch (err) {
+      alert('Could not parse that JSON file. Make sure it was exported from this app.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function clearAll() {
+  if (!confirm('Reset ALL data? This cannot be undone unless you have an exported backup.')) return;
+  if (!confirm('Really sure? Export first if you want a backup.')) return;
+  state = { ged: [], tc: [], ba: [], phd: [], pi: [], dates: [], custom: [] };
+  saveState();
+  render();
+  toast('All data cleared');
+}
+
+function printPage() {
+  window.print();
+}
+
+function copyTesuId() {
+  const id = document.getElementById('tesuId').textContent.trim();
+  navigator.clipboard.writeText(id).then(() => toast('TESU ID ' + id + ' copied'));
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+render();
+</script>
+</body>
+</html>
