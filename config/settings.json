@@ -1,8 +1,10 @@
 {
+  "dashboard_port": 8080,
   "claude_model": "claude-opus-4-8",
   "grok_model": "grok-3",
-  "poll_interval": 2,
+  "poll_interval_seconds": 3,
   "max_history_messages": 20,
   "max_responses_per_minute": 6,
-  "max_consecutive_agent_chain": 3
+  "max_consecutive_agent_chain": 3,
+  "export_path": "~/Desktop"
 }

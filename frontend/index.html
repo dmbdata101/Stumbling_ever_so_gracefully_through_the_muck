@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Hub</title>
+  <style>
+    /* ── PLACEHOLDER STYLES — Grok will replace this entire block ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0d1117; color: #e6edf3; font-family: monospace; font-size: 14px; display: flex; flex-direction: column; height: 100vh; }
+    #header { padding: 12px 16px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; gap: 16px; }
+    #header h1 { font-size: 16px; color: #58a6ff; }
+    #agent-status { display: flex; gap: 12px; font-size: 12px; }
+    .agent-badge { padding: 2px 8px; border-radius: 4px; }
+    .agent-badge.claude { background: #2d2000; color: #e3b341; }
+    .agent-badge.grok   { background: #2d0036; color: #d2a8ff; }
+    .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; }
+    .dot.working { background: #3fb950; }
+    .dot.idle    { background: #e3b341; }
+    .dot.offline { background: #6e7681; }
+    #project-bar { padding: 6px 16px; background: #0d1117; border-bottom: 1px solid #21262d; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #8b949e; }
+    #project-name { color: #58a6ff; font-weight: bold; }
+    #tokens { margin-left: auto; display: flex; gap: 12px; }
+    .token-badge { font-size: 11px; }
+    .token-badge.claude { color: #e3b341; }
+    .token-badge.grok   { color: #d2a8ff; }
+    #feed { flex: 1; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+    .msg { display: flex; gap: 10px; }
+    .msg-meta { min-width: 90px; text-align: right; font-size: 11px; color: #6e7681; padding-top: 2px; }
+    .msg-sender { font-weight: bold; font-size: 11px; }
+    .msg-sender.user   { color: #39d353; }
+    .msg-sender.claude { color: #e3b341; }
+    .msg-sender.grok   { color: #d2a8ff; }
+    .msg-sender.system { color: #6e7681; }
+    .msg-body { flex: 1; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+    pre { background: #161b22; border: 1px solid #30363d; border-radius: 4px; padding: 8px; overflow-x: auto; font-size: 12px; }
+    #input-bar { padding: 10px 16px; background: #161b22; border-top: 1px solid #30363d; display: flex; gap: 8px; }
+    #msg-input { flex: 1; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #e6edf3; padding: 8px 12px; font-size: 14px; font-family: monospace; resize: none; }
+    #msg-input:focus { outline: none; border-color: #58a6ff; }
+    #send-btn { background: #1f6feb; color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 13px; }
+    #send-btn:hover { background: #388bfd; }
+    #no-project { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 12px; color: #8b949e; }
+    #new-project-form { display: flex; gap: 8px; }
+    #new-project-form input { background: #0d1117; border: 1px solid #30363d; color: #e6edf3; padding: 6px 10px; border-radius: 6px; font-size: 13px; }
+    #new-project-form button { background: #238636; color: #fff; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <h1>⌂ Home Hub</h1>
+  <div id="agent-status">
+    <span class="agent-badge claude"><span class="dot offline" id="claude-dot"></span><span id="claude-status">CLAUDE offline</span></span>
+    <span class="agent-badge grok"><span class="dot offline" id="grok-dot"></span><span id="grok-status">GROK offline</span></span>
+  </div>
+</div>
+
+<div id="project-bar">
+  Project: <span id="project-name">none</span>
+  <div id="tokens">
+    <span class="token-badge claude" id="claude-tokens">CLAUDE 0 tokens · $0.00</span>
+    <span class="token-badge grok" id="grok-tokens">GROK 0 tokens · $0.00</span>
+  </div>
+</div>
+
+<div id="feed">
+  <div id="no-project">
+    <div>No active project. Start one:</div>
+    <div id="new-project-form">
+      <input id="proj-name-input" placeholder="Project name" />
+      <input id="proj-desc-input" placeholder="Description (optional)" />
+      <button onclick="createProject()">Create Project</button>
+    </div>
+  </div>
+</div>
+
+<div id="input-bar" style="display:none">
+  <textarea id="msg-input" rows="2" placeholder="Message both agents… (Enter to send, Shift+Enter for newline)"></textarea>
+  <button id="send-btn" onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+  // ── state ────────────────────────────────────────────────────────────────
+  let lastTimestamp = null;
+  let activeProject = null;
+  let pollTimer = null;
+
+  // ── boot ─────────────────────────────────────────────────────────────────
+  async function boot() {
+    await refreshAgents();
+    try {
+      const res = await fetch('/api/projects/current');
+      if (res.ok) {
+        activeProject = await res.json();
+        showFeed();
+        await loadAllMessages();
+        startPolling();
+      }
+    } catch (_) {}
+    setInterval(refreshAgents, 5000);
+    setInterval(refreshTokens, 8000);
+  }
+
+  // ── project ───────────────────────────────────────────────────────────────
+  async function createProject() {
+    const name = document.getElementById('proj-name-input').value.trim();
+    const desc = document.getElementById('proj-desc-input').value.trim();
+    if (!name) return;
+    const res = await fetch('/api/projects', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, description: desc}),
+    });
+    if (res.ok) {
+      activeProject = await res.json();
+      showFeed();
+      startPolling();
+    }
+  }
+
+  function showFeed() {
+    document.getElementById('no-project').style.display = 'none';
+    document.getElementById('project-name').textContent = activeProject.name;
+    document.getElementById('input-bar').style.display = 'flex';
+  }
+
+  // ── messages ──────────────────────────────────────────────────────────────
+  async function loadAllMessages() {
+    const res = await fetch('/api/messages');
+    if (!res.ok) return;
+    const msgs = await res.json();
+    msgs.forEach(appendMessage);
+    if (msgs.length > 0) lastTimestamp = msgs[msgs.length - 1].timestamp;
+  }
+
+  async function pollMessages() {
+    const url = lastTimestamp ? `/api/messages?since=${encodeURIComponent(lastTimestamp)}` : '/api/messages';
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return;
+      const msgs = await res.json();
+      msgs.forEach(m => {
+        appendMessage(m);
+        if (!lastTimestamp || m.timestamp > lastTimestamp) lastTimestamp = m.timestamp;
+      });
+    } catch (_) {}
+  }
+
+  function startPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(pollMessages, 5000);
+  }
+
+  function appendMessage(msg) {
+    const feed = document.getElementById('feed');
+    const noProj = document.getElementById('no-project');
+    if (noProj.style.display !== 'none') return;
+
+    const sender = msg.sender || 'system';
+    const ts = msg.timestamp ? msg.timestamp.slice(11, 19) : '';
+    const content = msg.content || '';
+
+    if (msg.type === 'status') return;
+
+    const row = document.createElement('div');
+    row.className = 'msg';
+    row.innerHTML = `
+      <div class="msg-meta">
+        <div class="msg-sender ${sender}">${sender.toUpperCase()}</div>
+        <div>${ts}</div>
+      </div>
+      <div class="msg-body">${renderContent(content)}</div>`;
+    feed.appendChild(row);
+    feed.scrollTop = feed.scrollHeight;
+  }
+
+  function renderContent(text) {
+    // Very basic: wrap ```...``` blocks in <pre>
+    return text
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre>$1</pre>');
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('msg-input');
+    const content = input.value.trim();
+    if (!content) return;
+    input.value = '';
+    const res = await fetch('/api/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({content}),
+    });
+    if (res.ok) {
+      const msg = await res.json();
+      appendMessage(msg);
+      lastTimestamp = msg.timestamp;
+    }
+  }
+
+  // ── agents ────────────────────────────────────────────────────────────────
+  async function refreshAgents() {
+    try {
+      const res = await fetch('/api/agents');
+      if (!res.ok) return;
+      const data = await res.json();
+      for (const [agent, info] of Object.entries(data)) {
+        const status = info.status || 'offline';
+        const dot = document.getElementById(`${agent}-dot`);
+        const label = document.getElementById(`${agent}-status`);
+        dot.className = `dot ${status}`;
+        label.textContent = `${agent.toUpperCase()} ${status}`;
+      }
+    } catch (_) {}
+  }
+
+  // ── tokens ────────────────────────────────────────────────────────────────
+  async function refreshTokens() {
+    if (!activeProject) return;
+    try {
+      const res = await fetch('/api/tokens');
+      if (!res.ok) return;
+      const data = await res.json();
+      for (const [agent, tok] of Object.entries(data)) {
+        const total = (tok.input_tokens || 0) + (tok.output_tokens || 0);
+        const cost = (tok.estimated_cost_usd || 0).toFixed(4);
+        document.getElementById(`${agent}-tokens`).textContent =
+          `${agent.toUpperCase()} ${total.toLocaleString()} tokens · $${cost}`;
+      }
+    } catch (_) {}
+  }
+
+  // ── keyboard ──────────────────────────────────────────────────────────────
+  document.addEventListener('keydown', e => {
+    const input = document.getElementById('msg-input');
+    if (e.target === input && e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  boot();
+</script>
+</body>
+</html>
