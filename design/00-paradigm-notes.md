@@ -146,6 +146,19 @@ commands themselves uncompressed; typing them *is* the CCNA practice.
 
 ## Status
 
-Blocked on one decision: **which thesis sentence should be true?**
+**Decided.** Thesis B is the data model; A's namespace/capability idea is left
+as a seam for later. Go, because a single static binary starts in ~2ms and the
+CLI latency problem disappears before the daemon is even needed.
 
-Everything after that answers itself.
+The convergence that settled it: "one persistent queryable graph, no save, no
+load" and "never pay process startup on the hot path" turn out to describe the
+same architecture — a resident daemon holding the graph, with a thin client
+talking to it over a unix socket. The philosophy and the performance answer
+were the same decision.
+
+First vertical slice is in `../lab/`: `up`, `down`, `go`, `ls`, `stat`, `help`
+through every layer, mock and containerlab drivers, latency instrumented from
+the first commit. ~3ms per invocation end to end.
+
+Next, per the interaction notes above: **live in it for a couple of weeks
+before adding verbs**, so the vocabulary comes from what actually gets typed.

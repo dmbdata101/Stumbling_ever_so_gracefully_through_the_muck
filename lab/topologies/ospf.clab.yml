@@ -1,0 +1,18 @@
+# Single-area OSPF: three routers on a triangle.
+name: ospf
+
+topology:
+  nodes:
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+    r2:
+      kind: linux
+      image: frrouting/frr:latest
+    r3:
+      kind: linux
+      image: frrouting/frr:latest
+  links:
+    - endpoints: ["r1:eth1", "r2:eth1"]
+    - endpoints: ["r2:eth2", "r3:eth1"]
+    - endpoints: ["r3:eth2", "r1:eth2"]

@@ -1,0 +1,17 @@
+# Access/trunk VLAN practice: one switch, two hosts.
+name: vlan
+
+topology:
+  nodes:
+    sw1:
+      kind: linux
+      image: frrouting/frr:latest
+    h1:
+      kind: linux
+      image: alpine:latest
+    h2:
+      kind: linux
+      image: alpine:latest
+  links:
+    - endpoints: ["sw1:eth1", "h1:eth1"]
+    - endpoints: ["sw1:eth2", "h2:eth1"]
